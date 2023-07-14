@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 3000;
 //dabase connection
 dbconnection();
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log("Server listenign on port " + PORT);
 });
+
+// server.close();
