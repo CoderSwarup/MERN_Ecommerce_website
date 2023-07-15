@@ -1,6 +1,6 @@
 const productModel = require("../Model/product.model");
-const ErrorHandler = require("../utils/errorhandler");
-
+const ApiFeatures = require("../utils/ApiFeatures");
+const ErrorHandler = require("../utils/ErrorHandler");
 //create Product  => Admin
 exports.createProduct = async (req, res) => {
   try {
@@ -100,18 +100,27 @@ exports.gteSingleProductController = async (req, res) => {
 // getall products
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await productModel.find({});
+    const ProductCount = await productModel.countDocuments();
+    const apiFeatures = new ApiFeatures(productModel.find({}), req.query)
+      .search()
+      .filter()
+      .pagination(2);
+
+    // const products = await productModel.find({});
+    const products = await apiFeatures.query;
 
     if (products) {
       res.status(201).send({
         success: true,
         message: "Products fetched Succefully",
+        Totalproduct: ProductCount,
         products,
       });
     } else {
       throw ErrorHandler.NotFoundError("Products Not Found");
     }
   } catch (error) {
-    res.status(error.status).send(error);
+    console.log(error);
+    res.status(error?.status).send(error);
   }
 };
