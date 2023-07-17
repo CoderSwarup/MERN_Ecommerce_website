@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const productSchema = mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -61,9 +61,15 @@ const productSchema = mongoose.Schema(
         },
       },
     ],
+
     createdAt: {
       type: Date,
       default: Date.now(),
+    },
+    createdBy: {
+      type: mongoose.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   {

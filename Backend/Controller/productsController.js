@@ -1,19 +1,33 @@
 const productModel = require("../Model/product.model");
 const ApiFeatures = require("../utils/ApiFeatures");
 const ErrorHandler = require("../utils/ErrorHandler");
+const { ThrowError } = require("../utils/ErrorHelper");
 //create Product  => Admin
 exports.createProduct = async (req, res) => {
   try {
+    req.body.createdBy = req.user._id;
     const product = await productModel(req.body);
 
-    product.save();
-    res.status(201).send({
-      success: true,
-      message: "Created successfully",
-      product,
-    });
+    product
+      .save()
+      .then(() => {
+        res.status(201).send({
+          success: true,
+          message: "Created successfully",
+          product,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).send({
+          status: false,
+          message: "All Fields Are Required",
+        });
+      });
+
+    // ValidationError
   } catch (error) {
-    console.log(error);
+    ThrowError(error, res, "creating Product");
   }
 };
 
@@ -43,7 +57,7 @@ exports.updateProductController = async (req, res) => {
       product,
     });
   } catch (error) {
-    console.log(error);
+    ThrowError(error, res, "updating Product");
   }
 };
 
@@ -66,7 +80,7 @@ exports.deleteProductcontroller = async (req, res) => {
     });
   } catch (error) {
     // console.log({ error });
-    res.status(error.status).send(error);
+    ThrowError(error, res, "deleting Product");
   }
 };
 
@@ -92,7 +106,7 @@ exports.gteSingleProductController = async (req, res) => {
     //   success: false,
     //   message: error.message,
     // });
-    res.status(error.status).send(error);
+    ThrowError(error, res, "Geting Single Product");
     // next(error);
   }
 };
@@ -120,7 +134,6 @@ exports.getAllProducts = async (req, res) => {
       throw ErrorHandler.NotFoundError("Products Not Found");
     }
   } catch (error) {
-    console.log(error);
-    res.status(error?.status).send(error);
+    ThrowError(error, res, "all Product");
   }
 };

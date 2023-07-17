@@ -1,0 +1,108 @@
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcrypt");
+const JWT = require("jsonwebtoken");
+const dotenv = require("dotenv");
+const crypto = require("crypto");
+
+dotenv.config();
+
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      maxLength: [30],
+      minLength: [4, "minmum name Cahrater Length 4"],
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: [validator.isEmail, "Please Eneter a Valid Email"],
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    mobile: {
+      type: Number,
+      required: true,
+    },
+    avatar: {
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+    },
+    role: {
+      type: String,
+      required: true,
+      default: "user",
+    },
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpired: {
+      type: Date,
+    },
+  },
+  {
+    versionKey: false,
+  }
+);
+
+UserSchema.pre("save", async function (next) {
+  try {
+    if (this.isModified("password")) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//jwt token
+
+UserSchema.methods.getJWTToken = function () {
+  return JWT.sign({ _id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
+
+//campare password
+
+UserSchema.methods.comparePassword = async function (password) {
+  const isMatch = await bcrypt.compareSync(password, this.password);
+  return await isMatch;
+};
+
+//reset pasword Method
+UserSchema.methods.generatePasswordResetToken = function () {
+  try {
+    // this resettoken genarate the random value
+    let resetToken = crypto.randomBytes(20).toString("hex");
+    // console.log(resetToken);
+
+    //hashing and adding to user schema
+    this.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    this.resetPasswordExpired = new Date(Date.now() + 20000);
+
+    // console.log(newlytoken, expires);
+    return this.resetPasswordToken;
+  } catch (error) {
+    console.log("error");
+  }
+};
+module.exports = mongoose.model("User", UserSchema);
