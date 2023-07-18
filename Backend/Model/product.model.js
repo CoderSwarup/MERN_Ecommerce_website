@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema(
       required: true,
       maxLength: [8, "Price Cannot exceed 8 Charater"],
     },
-    rating: {
+    ratings: {
       type: Number,
       default: 0,
     },
@@ -41,12 +41,16 @@ const productSchema = new mongoose.Schema(
       min: [1, "Product Stock should be greater than or equal to one"],
       default: 1,
     },
-    numofReviews: {
+    numofreviews: {
       type: Number,
       default: 0,
     },
     reviews: [
       {
+        user: {
+          type: mongoose.ObjectId,
+          res: "User",
+        },
         name: {
           type: String,
           required: true,

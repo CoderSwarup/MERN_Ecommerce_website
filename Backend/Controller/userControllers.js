@@ -180,3 +180,151 @@ exports.ResetPasswordController = async (req, res) => {
     ThrowError(error, res, "Reset Password Time ");
   }
 };
+
+//UserRutes
+exports.GetUserDeatils = async (req, res) => {
+  try {
+    const user = await usersModel.findById(req.user._id);
+    if (!user) {
+      throw ErrorHandler.customError("User Not Found", 404);
+    }
+    res.status(200).send({
+      success: true,
+      message: "You Details Gotted",
+      user,
+    });
+  } catch (error) {
+    ThrowError(error, res, "Getting user Details");
+  }
+};
+
+//Chnage Password
+
+exports.UpdatePasswordController = async (req, res) => {
+  try {
+    const user = await usersModel.findById(req.user._id).select("+password");
+    if (!user) {
+      throw ErrorHandler.customError("User Not Found", 404);
+    }
+
+    if (!req.body.oldpassword || !req.body.newpassword || !req.body.cpassword) {
+      throw ErrorHandler.customError("all Password Field Are Required", 404);
+    }
+
+    const isPassMatch = await user.comparePassword(req.body.oldpassword);
+    if (!isPassMatch) {
+      throw ErrorHandler.customError("Old Password i Incorrect", 404);
+    }
+
+    if (req.body.newpassword !== req.body.cpassword) {
+      throw ErrorHandler.customError("Password Not Matched", 404);
+    }
+
+    user.password = req.body.newpassword;
+
+    await user.save();
+
+    sendToken(user, 200, "Password Update  Succcessfully", res);
+  } catch (error) {
+    ThrowError(error, res, "Chnging Password");
+  }
+};
+
+//update Profile Controller
+exports.UpdateProfileController = async (req, res) => {
+  try {
+    const NewUserData = {
+      name: req.body.name,
+      email: req.body.email,
+      mobile: req.body.mobile,
+    };
+
+    const user = await usersModel.findByIdAndUpdate(req.user._id, NewUserData, {
+      new: true,
+    });
+
+    res.status(200).send({
+      success: true,
+      message: "Profile Updated Succefully",
+    });
+  } catch (error) {
+    console.log(error);
+    ThrowError(error, res, "Update Profile");
+  }
+};
+
+// admin show all user profiles
+
+exports.GetAllUserDeatils = async (req, res) => {
+  try {
+    const alluser = await usersModel.find({});
+
+    res.status(200).send({
+      success: true,
+      message: "allUser Deatils",
+      alluser,
+    });
+  } catch (error) {
+    ThrowError(error, res, "Get ALL User");
+  }
+};
+
+//single details of user admin can see only
+exports.GetSingleUserDeatils = async (req, res) => {
+  try {
+    const user = await usersModel.findById(req.params.id);
+
+    if (!user) {
+      throw ErrorHandler.customError(`${req.params.id} User Not Found `, 201);
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "User Deatils",
+      user,
+    });
+  } catch (error) {
+    ThrowError(error, res, "Get ALL User");
+  }
+};
+
+//update userRle ==>admin
+exports.UpdateUserRole = async (req, res) => {
+  try {
+    if (!req.body.role) {
+      throw ErrorHandler.customError("please Pass the Role", 404);
+    }
+    const { role } = req.body;
+
+    const user = await usersModel.findByIdAndUpdate(
+      req.params.id,
+      { role: role },
+      { new: true }
+    );
+
+    await user.save();
+
+    res.status(200).send({
+      success: true,
+      message: "user Role is Updated ",
+    });
+  } catch (error) {
+    ThrowError(error, res, "Updating Role");
+  }
+};
+
+//delete user
+exports.DeleteUser = async (req, res) => {
+  try {
+    const user = await usersModel.findByIdAndDelete(req.params.id);
+    if (!user) {
+      throw ErrorHandler.customError("User Not Found", 404);
+    }
+    res.status(200).send({
+      success: true,
+      message: "user is Deleted ",
+    });
+  } catch (error) {
+    ThrowError(error, res, "Updating Role");
+  }
+};
