@@ -15,12 +15,12 @@ import { FcList } from "react-icons/fc";
 const routes = [
   {
     path: "/",
-    name: "Dashboard",
+    name: "Home",
     icon: <FaHome />,
   },
   {
     path: "/users",
-    name: "Users",
+    name: "Profile",
     icon: <FaUser />,
   },
   {
@@ -184,6 +184,7 @@ export default function Header({ children }) {
                   route={route}
                   showAnimation={showAnimation}
                   isOpen={isOpen}
+                  key={index}
                 />
               );
             }
@@ -193,7 +194,7 @@ export default function Header({ children }) {
                 to={route.path}
                 key={index}
                 className="link"
-                activeClassName="active"
+                activeclassname="active"
               >
                 <div className="icon">{route.icon}</div>
                 <AnimatePresence>
