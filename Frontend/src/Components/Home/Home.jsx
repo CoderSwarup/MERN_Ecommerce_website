@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CgMouse } from "react-icons/cg";
 import "./Home.css";
 import Product from "../Product/Product";
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Layouts/Loader/Loading";
 import { toast } from "react-toastify";
 import { fetchProducts } from "../../Store/Actions/ProductActions";
+import ProductsPage from "../Product/ProductsPage";
 
 const product = {
   _id: "22029",
@@ -21,13 +22,13 @@ const product = {
 
 export default function Home() {
   const dispatch = useDispatch();
-  const page = useSelector((state) => state.products.page);
+  const [page, setpage] = useState(1);
   const { loading, products, error } = useSelector((state) => state.products);
   if (error) {
     toast.error(error);
   }
   useEffect(() => {
-    dispatch(fetchProducts(page));
+    dispatch(fetchProducts(`?page=${page}`));
   }, [dispatch]);
 
   return (

@@ -1,8 +1,9 @@
 import React from "react";
 
 import "./Header.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
+import { MdStore } from "react-icons/md";
 import { MdMessage } from "react-icons/md";
 import { BiAnalyse, BiSearch } from "react-icons/bi";
 import { BiCog } from "react-icons/bi";
@@ -19,9 +20,9 @@ const routes = [
     icon: <FaHome />,
   },
   {
-    path: "/users",
-    name: "Profile",
-    icon: <FaUser />,
+    path: "/Products",
+    name: "Products",
+    icon: <MdStore />,
   },
   {
     path: "/messages",
@@ -93,6 +94,17 @@ const routes = [
 export default function Header({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+  const [keyword, setkeyword] = useState("");
+  const Navigate = useNavigate();
+
+  const SearchKeyword = (e) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+      Navigate(`/products/${keyword}`);
+    } else {
+      Navigate("/products");
+    }
+  };
   const inputAnimation = {
     hidden: {
       width: 0,
@@ -164,14 +176,20 @@ export default function Header({ children }) {
           </div>
           <AnimatePresence>
             {isOpen && (
-              <motion.input
-                initial="hidden"
-                animate="show"
-                exit="hidden"
-                variants={inputAnimation}
-                type="text"
-                placeholder="Search"
-              />
+              <form action="" onSubmit={SearchKeyword}>
+                <motion.input
+                  initial="hidden"
+                  animate="show"
+                  exit="hidden"
+                  variants={inputAnimation}
+                  type="text"
+                  placeholder="Search"
+                  onChange={(e) => {
+                    setkeyword(e.target.value);
+                  }}
+                  value={keyword}
+                />
+              </form>
             )}
           </AnimatePresence>
         </div>
@@ -206,7 +224,7 @@ export default function Header({ children }) {
                       exit="hidden"
                       className="link_text"
                     >
-                      {route.name}
+                      <span className="route-name"> {route.name}</span>
                     </motion.div>
                   )}
                 </AnimatePresence>

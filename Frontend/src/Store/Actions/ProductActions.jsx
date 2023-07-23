@@ -6,14 +6,14 @@ import axios from "axios";
 // all products fetched
 export const fetchProducts = createAsyncThunk(
   "products/fetch",
-  async (page) => {
+  async (search) => {
     try {
       const response = await axios.get(
-        `/api/v1/products/all-products?page=${page}`
+        `/api/v1/products/all-products${search}`
       ); // Replace with your backend API endpoint
       return response.data;
     } catch (error) {
-      throw new Error("Error fetching products: " + error.message);
+      throw new Error("Error fetching products: ");
     }
   }
 );

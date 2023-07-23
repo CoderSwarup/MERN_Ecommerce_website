@@ -92,10 +92,10 @@ exports.gteSingleProductController = async (req, res) => {
     let product = await productModel.findById(id);
     // console.log(id, product);
     if (!product) {
-      throw ErrorHandler.NotFoundError("product Not Found");
-      // throw ErrorHandler.customError("Product Not Found", 400);
+      // throw ErrorHandler.NotFoundError("product Not Found");
+      throw ErrorHandler.customError("Product Not Found", 404);
     }
-    res.status(201).send({
+    res.status(200).send({
       success: true,
       message: "Product is Found",
       product,
@@ -112,28 +112,91 @@ exports.gteSingleProductController = async (req, res) => {
 };
 
 // getall products
+// exports.getAllProducts = async (req, res) => {
+//   try {
+//     const resultperpage = 5;
+//     const ProductCount = await productModel.countDocuments();
+//     const apiFeatures = new ApiFeatures(productModel.find({}), req.query)
+//       .search()
+//       .filter()
+//       .pagination(resultperpage);
+
+//     // const products = await productModel.find({});
+//     const products = await apiFeatures.query;
+//     // const ProductCount = products.length;
+//     if (products) {
+//       res.status(201).send({
+//         success: true,
+//         message: "Products fetched Succefully",
+//         Totalproduct: ProductCount,
+//         resultperpage,
+//         products,
+//       });
+//     } else {
+//       throw ErrorHandler.NotFoundError("Products Not Found");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     ThrowError(error, res, "all Product");
+//   }
+// };
+
 exports.getAllProducts = async (req, res) => {
   try {
-    const ProductCount = await productModel.countDocuments();
-    const apiFeatures = new ApiFeatures(productModel.find({}), req.query)
-      .search()
-      .filter()
-      .pagination(2);
+    const resultperpage = 5;
+    let totalProductCount;
+    let searchConditions = {};
 
-    // const products = await productModel.find({});
-    const products = await apiFeatures.query;
+    // Handle keyword search
+    if (req.query.keyword) {
+      const keyword = req.query.keyword;
+      const numericKeyword = parseFloat(keyword);
+      const priceSearch = isNaN(numericKeyword) ? null : numericKeyword;
 
-    if (products) {
-      res.status(201).send({
-        success: true,
-        message: "Products fetched Succefully",
-        Totalproduct: ProductCount,
-        products,
-      });
-    } else {
-      throw ErrorHandler.NotFoundError("Products Not Found");
+      searchConditions.$or = [
+        { name: { $regex: keyword, $options: "i" } },
+        { price: priceSearch },
+      ];
     }
+
+    // Handle category and price filters
+    const filterConditions = { ...req.query };
+    delete filterConditions.keyword;
+    delete filterConditions.page;
+    delete filterConditions.limit;
+
+    let filterStr = JSON.stringify(filterConditions);
+    filterStr = filterStr.replace(
+      /\b(gt|gte|lt|lte)\b/g,
+      (match) => `$${match}`
+    );
+    const filterQuery = JSON.parse(filterStr);
+
+    if (Object.keys(filterQuery).length > 0) {
+      searchConditions = { ...searchConditions, ...filterQuery };
+    }
+
+    // Get total count of products
+    totalProductCount = await productModel.countDocuments(searchConditions);
+
+    // Apply pagination
+    const currentPage = parseInt(req.query.page) || 1;
+    const skipCount = resultperpage * (currentPage - 1);
+
+    const products = await productModel
+      .find(searchConditions)
+      .limit(resultperpage)
+      .skip(skipCount);
+
+    res.status(200).send({
+      success: true,
+      message: "Products fetched Successfully",
+      Totalproduct: totalProductCount,
+      resultperpage,
+      products,
+    });
   } catch (error) {
+    console.log(error);
     ThrowError(error, res, "all Product");
   }
 };

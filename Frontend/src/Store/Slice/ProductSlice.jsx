@@ -7,7 +7,7 @@ import { fetchProducts, getProductDetails } from "../Actions/ProductActions";
 const productSlice = createSlice({
   name: "products",
   initialState: {
-    products: [],
+    products: {},
     loading: false,
     error: null,
     page: 1,

@@ -5,17 +5,23 @@ class ApiFeatures {
   }
 
   search() {
-    const keyword = this.queryStr.keyword
-      ? {
-          name: {
-            $regex: this.queryStr.keyword,
-            $options: "i",
-          },
-        }
-      : {};
+    const keyword = this.queryStr.keyword;
 
-    // console.log(keyword);
-    this.query = this.query.find({ ...keyword });
+    if (keyword) {
+      // Check if the keyword is numeric (for price search)
+      const numericKeyword = parseFloat(keyword);
+      const priceSearch = isNaN(numericKeyword) ? null : numericKeyword;
+
+      // Create the search conditions based on name and/or price
+      const searchConditions = {
+        $or: [
+          { name: { $regex: keyword, $options: "i" } },
+          { price: priceSearch },
+        ],
+      };
+
+      this.query = this.query.find(searchConditions);
+    }
     return this;
   }
 
