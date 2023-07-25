@@ -6,9 +6,13 @@ const cookieParser = require("cookie-parser");
 const OrderRouter = require("./Routes/orderRoutes");
 const CategoryRouter = require("./Routes/categoryRoute");
 const app = express();
+const bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload");
 //middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 //error middleware // No need this
 app.use(function (error, rq, res, next) {

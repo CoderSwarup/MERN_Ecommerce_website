@@ -4,7 +4,7 @@ import "./Header.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
 import { MdStore } from "react-icons/md";
-import { MdMessage } from "react-icons/md";
+import { BiSolidUserCircle } from "react-icons/bi";
 import { BiAnalyse, BiSearch } from "react-icons/bi";
 import { BiCog } from "react-icons/bi";
 import { AiFillHeart, AiTwotoneFileExclamation } from "react-icons/ai";
@@ -13,6 +13,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SidebarMenu from "./SidebarMenu";
 import { FcList } from "react-icons/fc";
+
 const routes = [
   {
     path: "/",
@@ -25,9 +26,9 @@ const routes = [
     icon: <MdStore />,
   },
   {
-    path: "/messages",
-    name: "Messages",
-    icon: <MdMessage />,
+    path: "/signin",
+    name: "SignIn",
+    icon: <BiSolidUserCircle />,
   },
   {
     path: "/analytics",

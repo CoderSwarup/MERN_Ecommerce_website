@@ -10,6 +10,8 @@ export default defineConfig({
       "/api/v1/products/all-products": BASE_URL,
       "/api/v1/products/single-product": BASE_URL,
       "/api/v1/category/all-category": BASE_URL,
+      "/api/v1/login": BASE_URL,
+      "/api/v1/register": BASE_URL,
     },
   },
 });

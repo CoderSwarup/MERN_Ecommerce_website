@@ -4,6 +4,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const sendToken = require("../utils/JWTtoken");
 const { ThrowError } = require("../utils/ErrorHelper");
 const { SendEmail } = require("../utils/sendEamil");
+const cloudinary = require("cloudinary");
 
 exports.RegisterUserController = async (req, res) => {
   try {
@@ -17,6 +18,15 @@ exports.RegisterUserController = async (req, res) => {
         message: "Email is Not Valid",
       });
     }
+    let myCloud;
+
+    if (req.body.avatar !== "/Profile.png") {
+      myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "samecomm",
+        width: 150,
+        crop: "scale",
+      });
+    }
 
     const user = await usersModel({
       name,
@@ -24,8 +34,8 @@ exports.RegisterUserController = async (req, res) => {
       password,
       mobile,
       avatar: {
-        public_id: "this is images",
-        url: "djdjdj",
+        public_id: myCloud?.public_id || Math.floor(Math.random() * 26633636),
+        url: myCloud?.secure_url || "/Profile.png",
       },
     });
     user
@@ -76,7 +86,6 @@ exports.loginUserController = async (req, res) => {
 
     sendToken(user, 200, "login Succcessfully", res);
   } catch (error) {
-    console.log(error);
     ThrowError(error, res, "Login");
   }
 };
