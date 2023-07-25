@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const productModel = require("../Model/product.model");
 const ApiFeatures = require("../utils/ApiFeatures");
 const ErrorHandler = require("../utils/ErrorHandler");
@@ -89,7 +90,9 @@ exports.gteSingleProductController = async (req, res) => {
   try {
     const id = req.params.id;
 
-    let product = await productModel.findById(id);
+    let product = await productModel
+      .findById(id)
+      .populate("category", "name slug");
     // console.log(id, product);
     if (!product) {
       // throw ErrorHandler.NotFoundError("product Not Found");
@@ -112,6 +115,7 @@ exports.gteSingleProductController = async (req, res) => {
 };
 
 // getall products
+
 // exports.getAllProducts = async (req, res) => {
 //   try {
 //     const resultperpage = 5;
@@ -158,6 +162,11 @@ exports.getAllProducts = async (req, res) => {
         { price: priceSearch },
       ];
     }
+    // Handle category filter
+    if (req.query.category) {
+      // Assuming that category is provided as a string containing the category ID
+      searchConditions.category = req.query.category;
+    }
 
     // Handle category and price filters
     const filterConditions = { ...req.query };
@@ -186,7 +195,8 @@ exports.getAllProducts = async (req, res) => {
     const products = await productModel
       .find(searchConditions)
       .limit(resultperpage)
-      .skip(skipCount);
+      .skip(skipCount)
+      .populate("category", "name slug");
 
     res.status(200).send({
       success: true,
@@ -201,7 +211,6 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
-//Review Controller
 exports.CreateProductReviewController = async (req, res) => {
   try {
     const { rating, comment, productId } = req.body;

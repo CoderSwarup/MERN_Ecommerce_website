@@ -9,6 +9,7 @@ export default defineConfig({
     proxy: {
       "/api/v1/products/all-products": BASE_URL,
       "/api/v1/products/single-product": BASE_URL,
+      "/api/v1/category/all-category": BASE_URL,
     },
   },
 });

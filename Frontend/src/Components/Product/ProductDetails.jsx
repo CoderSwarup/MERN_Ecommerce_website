@@ -51,13 +51,18 @@ export default function ProductDetails() {
   useEffect(() => {
     dispatch(getProductDetails(params.id));
   }, []);
+
+  const metaTitle = product?.name || "Product Details - Sam Ecommerce";
+  const metaDescription =
+    product?.description || "Discover the details of this amazing product.";
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
         <>
-          <Metadata title={`${product?.name} -- ECOMMERCE`} />
+          <Metadata title={metaTitle} description={metaDescription} />
+
           <div className="ProductDetails">
             {/* Prduct img container  */}
 
