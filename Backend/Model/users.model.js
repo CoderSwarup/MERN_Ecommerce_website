@@ -54,6 +54,7 @@ const UserSchema = new mongoose.Schema(
     },
   },
   {
+    timestamps: true,
     versionKey: false,
   }
 );
@@ -78,7 +79,6 @@ UserSchema.methods.getJWTToken = function () {
 };
 
 //campare password
-
 UserSchema.methods.comparePassword = async function (password) {
   const isMatch = await bcrypt.compareSync(password, this.password);
   return await isMatch;

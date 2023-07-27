@@ -22,7 +22,7 @@ userRouter.route("/register").post(RegisterUserController);
 userRouter.route("/login").post(loginUserController);
 
 //logout
-userRouter.route("/logout").get(LogoutUserController);
+userRouter.route("/logout").get(isAuthicatedUser, LogoutUserController);
 
 //Forgot
 userRouter.route("/password/forgot").post(ForgotPasswordController);

@@ -24,9 +24,9 @@ exports.isAuthicatedUser = async (req, res, next) => {
     next();
   } catch (error) {
     if (error instanceof JWT.TokenExpiredError) {
-      return res.status(201).send({
+      return res.status(404).send({
         success: false,
-        message: "Please Login",
+        message: "Token Expire Please Login",
       });
     } else {
       ThrowError(error, res, "Authetication Time");

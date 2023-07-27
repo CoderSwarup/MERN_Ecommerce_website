@@ -12,6 +12,8 @@ export default defineConfig({
       "/api/v1/category/all-category": BASE_URL,
       "/api/v1/login": BASE_URL,
       "/api/v1/register": BASE_URL,
+      "/api/v1/myprofile": BASE_URL,
+      "/api/v1/logout": BASE_URL,
     },
   },
 });

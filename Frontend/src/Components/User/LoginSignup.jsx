@@ -79,19 +79,12 @@ export default function LoginSignup() {
   };
 
   const redirect = location.state ? location.state.from : "/account";
-  if (message) {
-    toast.success(message);
 
-    dispatch(clearMessage());
-  }
   useEffect(() => {
     if (isAuthenticated) {
       history(redirect);
     }
-    if (error) {
-      toast.error(error);
-    }
-  }, [dispatch, isAuthenticated, error, message]);
+  }, [dispatch, isAuthenticated]);
 
   //-----------------
   //Login register tab Switching Form Switching

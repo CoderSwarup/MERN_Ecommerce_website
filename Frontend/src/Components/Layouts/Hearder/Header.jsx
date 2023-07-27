@@ -13,86 +13,90 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SidebarMenu from "./SidebarMenu";
 import { FcList } from "react-icons/fc";
-
-const routes = [
-  {
-    path: "/",
-    name: "Home",
-    icon: <FaHome />,
-  },
-  {
-    path: "/Products",
-    name: "Products",
-    icon: <MdStore />,
-  },
-  {
-    path: "/signin",
-    name: "SignIn",
-    icon: <BiSolidUserCircle />,
-  },
-  {
-    path: "/analytics",
-    name: "Analytics",
-    icon: <BiAnalyse />,
-  },
-  {
-    path: "/file-manager",
-    name: "File Manager",
-    icon: <AiTwotoneFileExclamation />,
-    subRoutes: [
-      {
-        path: "/settings/profile",
-        name: "Profile ",
-        icon: <FaUser />,
-      },
-      {
-        path: "/settings/2fa",
-        name: "2FA",
-        icon: <FaLock />,
-      },
-      {
-        path: "/settings/billing",
-        name: "Billing",
-        icon: <FaMoneyBill />,
-      },
-    ],
-  },
-  {
-    path: "/order",
-    name: "Order",
-    icon: <BsCartCheck />,
-  },
-  {
-    path: "/settings",
-    name: "Settings",
-    icon: <BiCog />,
-    exact: true,
-    subRoutes: [
-      {
-        path: "/settings/profile",
-        name: "Profile ",
-        icon: <FaUser />,
-      },
-      {
-        path: "/settings/2fa",
-        name: "2FA",
-        icon: <FaLock />,
-      },
-      {
-        path: "/settings/billing",
-        name: "Billing",
-        icon: <FaMoneyBill />,
-      },
-    ],
-  },
-  {
-    path: "/saved",
-    name: "Saved",
-    icon: <AiFillHeart />,
-  },
-];
+import { useSelector } from "react-redux";
 
 export default function Header({ children }) {
+  const { isAuthenticated } = useSelector((state) => {
+    return state.user;
+  });
+
+  const routes = [
+    {
+      path: "/",
+      name: "Home",
+      icon: <FaHome />,
+    },
+    {
+      path: "/Products",
+      name: "Products",
+      icon: <MdStore />,
+    },
+    {
+      path: `${isAuthenticated ? "/account" : "/signin"}`,
+      name: `${isAuthenticated ? "Account" : "SignIn"}`,
+      icon: <BiSolidUserCircle />,
+    },
+    {
+      path: "/analytics",
+      name: "Analytics",
+      icon: <BiAnalyse />,
+    },
+    {
+      path: "/file-manager",
+      name: "File Manager",
+      icon: <AiTwotoneFileExclamation />,
+      subRoutes: [
+        {
+          path: "/settings/profile",
+          name: "Profile ",
+          icon: <FaUser />,
+        },
+        {
+          path: "/settings/2fa",
+          name: "2FA",
+          icon: <FaLock />,
+        },
+        {
+          path: "/settings/billing",
+          name: "Billing",
+          icon: <FaMoneyBill />,
+        },
+      ],
+    },
+    {
+      path: "/order",
+      name: "Order",
+      icon: <BsCartCheck />,
+    },
+    {
+      path: "/settings",
+      name: "Settings",
+      icon: <BiCog />,
+      exact: true,
+      subRoutes: [
+        {
+          path: "/settings/profile",
+          name: "Profile ",
+          icon: <FaUser />,
+        },
+        {
+          path: "/settings/2fa",
+          name: "2FA",
+          icon: <FaLock />,
+        },
+        {
+          path: "/settings/billing",
+          name: "Billing",
+          icon: <FaMoneyBill />,
+        },
+      ],
+    },
+    {
+      path: "/saved",
+      name: "Saved",
+      icon: <AiFillHeart />,
+    },
+  ];
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const [keyword, setkeyword] = useState("");

@@ -199,7 +199,7 @@ exports.GetUserDeatils = async (req, res) => {
     }
     res.status(200).send({
       success: true,
-      message: "You Details Gotted",
+      message: "Welcome Back To Our Website",
       user,
     });
   } catch (error) {
