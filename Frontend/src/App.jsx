@@ -16,6 +16,10 @@ import { clearError, clearMessage } from "./Store/Slice/UserSlice";
 import UserOptions from "./Components/Layouts/Hearder/UserOptions";
 import ProtectedRoute from "./Components/Route/ProtectedRoute";
 import Profile from "./Components/User/Profile";
+import UpdateProfile from "./Components/User/UpdateProfile";
+import UpdatePassword from "./Components/User/UpdatePassword";
+import ForgotPassword from "./Components/User/ForgotPassword";
+import ResetPassword from "./Components/User/ResetPassword";
 function App() {
   const dispatch = useDispatch();
   const { isAuthenticated, user, message, error } = useSelector((state) => {
@@ -60,9 +64,30 @@ function App() {
               path="/signin"
               element={<LoginSignup></LoginSignup>}
             ></Route>
+
+            {isAuthenticated && (
+              <>
+                <Route
+                  exact
+                  path="/account"
+                  element={<Profile></Profile>}
+                  // element={<ProtectedRoute element={Profile} />}
+                />
+                <Route exact path="/me/update" element={<UpdateProfile />} />
+
+                <Route
+                  exact
+                  path="/password/update"
+                  element={<UpdatePassword />}
+                />
+              </>
+            )}
+
+            <Route exact path="/password/forgot" element={<ForgotPassword />} />
             <Route
-              path="/account"
-              element={<ProtectedRoute element={Profile} />}
+              exact
+              path="/password/reset/:token"
+              element={<ResetPassword />}
             />
           </Routes>
         </Header>

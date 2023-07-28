@@ -14,6 +14,10 @@ export default defineConfig({
       "/api/v1/register": BASE_URL,
       "/api/v1/myprofile": BASE_URL,
       "/api/v1/logout": BASE_URL,
+      "/api/v1/update-profile": BASE_URL,
+      "/api/v1/password/update": BASE_URL,
+      "/api/v1/password/forgot": BASE_URL,
+      "/api/v1/password/reset": BASE_URL,
     },
   },
 });

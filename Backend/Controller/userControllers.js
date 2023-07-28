@@ -110,8 +110,13 @@ exports.LogoutUserController = async (req, res) => {
 //Forgot Password Controller
 
 exports.ForgotPasswordController = async (req, res) => {
+  if (req.body.email === "") {
+    throw ErrorHandler.customError("Please Fill Email Field", 404);
+  }
+  // console.log(req.body.email);
   let user = await usersModel.findOne({ email: req.body.email });
   try {
+    // console.log(user);
     if (!user) {
       throw ErrorHandler.customError(
         "User Not Found please Enter Correct Email",
@@ -127,9 +132,13 @@ exports.ForgotPasswordController = async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     // genaerate
-    const resetPasswordUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/api/v1/password/reset/${resetToken}`;
+    // const resetPasswordUrl = `${req.protocol}://${req.get(
+    //   "host"
+    // )}/api/v1/password/reset/${resetToken}`;
+
+    //genarate on frontend Url
+    const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+
     const message = `Your Reset Password Token is  == \n\n  ${resetPasswordUrl} \n\n if You Have Not requested this Email then , Please Error `;
 
     let EmailSend = await SendEmail(
@@ -163,7 +172,7 @@ exports.ResetPasswordController = async (req, res) => {
     const resetToken = req.params.token;
 
     if (req.body.password !== req.body.cpassword) {
-      throw ErrorHandler.customError("Password Not Matched", 201);
+      throw ErrorHandler.customError("Password Not Matched", 404);
     }
 
     const user = await usersModel.findOne({
@@ -185,7 +194,7 @@ exports.ResetPasswordController = async (req, res) => {
     await user.save();
     sendToken(user, 200, "Password Changed Succefully", res);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     ThrowError(error, res, "Reset Password Time ");
   }
 };
@@ -233,7 +242,7 @@ exports.UpdatePasswordController = async (req, res) => {
 
     await user.save();
 
-    sendToken(user, 200, "Password Update  Succcessfully", res);
+    sendToken(user, 200, "Password Update Succcessfully", res);
   } catch (error) {
     ThrowError(error, res, "Chnging Password");
   }
@@ -242,22 +251,47 @@ exports.UpdatePasswordController = async (req, res) => {
 //update Profile Controller
 exports.UpdateProfileController = async (req, res) => {
   try {
-    const NewUserData = {
+    let NewUserData = {
       name: req.body.name,
       email: req.body.email,
       mobile: req.body.mobile,
     };
 
+    // Update Cloudinary Images
+    if (req.body.avatar !== "") {
+      const user = await usersModel.findById(req.user.id);
+
+      const imageId = user.avatar.public_id;
+
+      await cloudinary.v2.uploader.destroy(imageId);
+
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "samecomm",
+        width: 150,
+        crop: "scale",
+      });
+
+      NewUserData.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+    }
+
     const user = await usersModel.findByIdAndUpdate(req.user._id, NewUserData, {
       new: true,
     });
+    if (!user) {
+      res.status(400).send({
+        success: false,
+        message: "User Not Found",
+      });
+    }
 
     res.status(200).send({
       success: true,
       message: "Profile Updated Succefully",
     });
   } catch (error) {
-    console.log(error);
     ThrowError(error, res, "Update Profile");
   }
 };

@@ -11,11 +11,11 @@ const Profile = () => {
   const createdAtString = user?.user?.createdAt?.toString().substring(0, 10);
 
   useEffect(() => {
-    console.log(isAuthenticated);
     if (isAuthenticated === false) {
+      console.log("wjeej");
       Navigate("/signin");
     }
-  }, [Navigate, isAuthenticated]);
+  }, [Navigate, isAuthenticated, loading]);
   return (
     <>
       {loading ? (

@@ -59,8 +59,7 @@ const UserOptions = ({ user }) => {
   }
   function logoutUser() {
     dispatch(LogOut());
-    // console.log("dhdjhdhjdjhdjhdh");
-    history("/signin");
+    history("/");
   }
 
   return (

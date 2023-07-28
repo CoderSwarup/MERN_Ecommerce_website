@@ -97,9 +97,9 @@ UserSchema.methods.generatePasswordResetToken = function () {
       .update(resetToken)
       .digest("hex");
 
-    this.resetPasswordExpired = new Date(Date.now() + 20000);
+    this.resetPasswordExpired = new Date(Date.now() + 15 * 60 * 1000);
 
-    // console.log(newlytoken, expires);
+    // console.log(this.resetPasswordToken.length);
     return this.resetPasswordToken;
   } catch (error) {
     console.log("error");
