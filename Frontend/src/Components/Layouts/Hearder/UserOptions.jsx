@@ -15,8 +15,7 @@ import { LogOut } from "../../../Store/Actions/AuthAction";
 import { clearMessage } from "../../../Store/Slice/UserSlice";
 
 const UserOptions = ({ user }) => {
-  // const { cartItems } = useSelector((state) => state.cart);
-  let cartItems = [];
+  const { cartItems } = useSelector((state) => state.cart);
   const [open, setOpen] = useState(false);
   const history = useNavigate();
   const dispatch = useDispatch();

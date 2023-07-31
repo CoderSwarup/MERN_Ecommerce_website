@@ -6,6 +6,7 @@ import {
 } from "./Slice/UserSlice";
 import { ProductDetailsReducer, productsReducer } from "./Slice/ProductSlice";
 import { CategoryReducer } from "./Slice/CategorySlice";
+import CartSlice from "./Slice/CartSlice";
 
 const Store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const Store = configureStore({
     productDetails: ProductDetailsReducer,
     categories: CategoryReducer,
     forgotpassword: ForgotPasswordReducer,
+    cart: CartSlice,
   },
 });
 

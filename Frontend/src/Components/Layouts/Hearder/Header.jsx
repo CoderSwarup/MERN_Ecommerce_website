@@ -64,8 +64,8 @@ export default function Header({ children }) {
       ],
     },
     {
-      path: "/order",
-      name: "Order",
+      path: "/cart",
+      name: "Cart",
       icon: <BsCartCheck />,
     },
     {

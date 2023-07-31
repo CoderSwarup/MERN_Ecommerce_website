@@ -8,6 +8,7 @@ const CategoryRouter = require("./Routes/categoryRoute");
 const app = express();
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
+const PaymentRouter = require("./Routes/PaymentRoute");
 //middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -24,5 +25,6 @@ app.use("/api/v1/category", CategoryRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1", userRouter);
 app.use("/api/v1/orders", OrderRouter);
+app.use("/api/v1/payment", PaymentRouter);
 
 module.exports = app;

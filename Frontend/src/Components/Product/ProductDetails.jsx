@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getProductDetails } from "../../Store/Actions/ProductActions";
@@ -10,6 +11,7 @@ import "./ProductDetails.css";
 import ReactStars from "react-rating-stars-component";
 import ReviewCard from "./ReviewCard";
 import { clearError } from "../../Store/Slice/ProductSlice";
+import { AddtoCart } from "../../Store/Slice/CartSlice";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -18,6 +20,9 @@ export default function ProductDetails() {
   const { loading, product, error } = useSelector(
     (state) => state.productDetails
   );
+  const { cartItems } = useSelector((state) => {
+    return state.cart;
+  });
 
   const Ratingoptions = {
     count: 5,
@@ -51,6 +56,32 @@ export default function ProductDetails() {
   useEffect(() => {
     dispatch(getProductDetails(params.id));
   }, []);
+
+  // Add To cart Options
+  const AddtoCartSubmit = (e) => {
+    let newProduct = cartItems.filter((cartI) => {
+      return cartI.product === params.id;
+    });
+    if (newProduct[0]) {
+      const netqantity = newProduct[0].quantity + quantity;
+      if (netqantity > newProduct[0].stock) {
+        console.log(newProduct[0].quantity);
+        toast.error("Product Stock Is Not Left Already Product Added In Card");
+        return false;
+      }
+    }
+    let cartitem = {
+      product: product?._id,
+      name: product?.name,
+      price: product?.price,
+      image: product?.images[0].url,
+      stock: product?.stock,
+      quantity,
+    };
+    dispatch(AddtoCart(cartitem));
+    setQuantity(1);
+    toast.success("Product Added");
+  };
 
   const metaTitle = product?.name || "Product Details - Sam Ecommerce";
   const metaDescription =
@@ -100,7 +131,10 @@ export default function ProductDetails() {
                     <input readOnly type="number" value={quantity} />
                     <button onClick={increaseQuantity}>+</button>
                   </div>
-                  <button disabled={product.stock < 1 ? true : false}>
+                  <button
+                    onClick={AddtoCartSubmit}
+                    disabled={product.stock < 1 ? true : false}
+                  >
                     Add to Cart
                   </button>
                 </div>
