@@ -249,7 +249,7 @@ exports.CreateProductReviewController = async (req, res) => {
     await product.save({ validateBeforeSave: false });
     res.status(200).send({
       success: true,
-      message: "Your Review is Saved",
+      message: "Thanks For Review , Your Review is Saved",
     });
   } catch (error) {
     ThrowError(error, res, "Product Review");

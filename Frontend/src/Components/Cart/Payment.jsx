@@ -18,8 +18,10 @@ import EventIcon from "@mui/icons-material/Event";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ClearOrderError, ClearOrderMsg } from "../../Store/Slice/OrderSlice";
+import { CreateNewOrder } from "../../Store/Actions/OrderActions";
 
-export default function Payment({ stripeapikey }) {
+export default function Payment() {
   const stripe = useStripe();
   const elements = useElements();
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
@@ -33,12 +35,13 @@ export default function Payment({ stripeapikey }) {
 
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
-  //   const { error } = useSelector((state) => state.newOrder);
+  // const { error, loading, message } = useSelector((state) => state.order);
 
   const paymentData = {
     amount: Math.round(orderInfo?.totalPrice * 100),
   };
 
+  //Order data
   const order = {
     shippingInfo,
     orderItems: cartItems,
@@ -47,6 +50,7 @@ export default function Payment({ stripeapikey }) {
     shippingPrice: orderInfo?.shippingCharges,
     totalPrice: orderInfo?.totalPrice,
   };
+  console.log(order);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -96,13 +100,14 @@ export default function Payment({ stripeapikey }) {
             status: result.paymentIntent.status,
           };
 
-          //   dispatch(createOrder(order));
+          dispatch(CreateNewOrder(order));
 
           toast.success(data.message);
+
+          Navigate("/order/success");
           sessionStorage.removeItem("orderInfo");
           localStorage.removeItem("shippingInfo");
           localStorage.removeItem("cartItems");
-          Navigate("/success");
         } else {
           toast.error("There's some issue while processing payment ");
         }
@@ -114,14 +119,25 @@ export default function Payment({ stripeapikey }) {
     }
   };
 
-  console.log(location.pathname);
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(error);
+  //     dispatch(ClearOrderError());
+  //   }
+  //   if (message) {
+  //     toast.success(message);
+  //     dispatch(ClearOrderMsg());
+  //   }
+  // }, [dispatch, error, message]);
+
+  // console.log(location.pathname);
   useEffect(() => {
     if (!orderInfo) {
       Navigate("/account", {
         state: location.pathname,
       });
     }
-  });
+  }, []);
 
   return (
     <Fragment>

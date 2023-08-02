@@ -27,12 +27,18 @@ import axios from "axios";
 import Payment from "./Components/Cart/Payment";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import OrderSuccess from "./Components/Cart/OrderSuccess";
+import MyOrders from "./Components/Order/Myorder";
 
 function App() {
   const dispatch = useDispatch();
   const { isAuthenticated, user, message, error } = useSelector((state) => {
     return state.user;
   });
+
+  // =======
+  //   STRAPE API KEY
+  //========
 
   const [stripeapikey, setStripeApiKey] = useState("");
   const [stripeLoaded, setStripeLoaded] = useState(false);
@@ -45,12 +51,13 @@ function App() {
         setStripeLoaded(true);
       } catch (error) {
         // Handle any error while fetching the stripe API key
-        console.error("Error fetching stripe API key:", error);
       }
     };
 
     getStripeKey();
   }, []);
+
+  // ========== STRAPE END
 
   useEffect(() => {
     dispatch(LoadUser());
@@ -67,6 +74,12 @@ function App() {
       dispatch(clearError());
     }
   }, [message, error]);
+
+  window.onerror = function (message, source, lineno, colno, error) {
+    console.log(); // Optionally, you can add additional logic here to handle the error.
+    // For now, we'll just return 'true' to suppress all errors.
+    return true;
+  };
   return (
     <>
       <BrowserRouter>
@@ -74,6 +87,7 @@ function App() {
           {isAuthenticated && (
             <>
               <UserOptions user={user}></UserOptions>
+
               {stripeLoaded && stripeapikey && (
                 <Routes>
                   <Route
@@ -83,6 +97,13 @@ function App() {
                         <Payment />
                       </Elements>
                     }
+                  />
+
+                  {/* Order Success Path */}
+                  <Route
+                    exact
+                    path="/order/success"
+                    element={<OrderSuccess />}
                   />
                 </Routes>
               )}
@@ -107,14 +128,21 @@ function App() {
               element={<LoginSignup></LoginSignup>}
             ></Route>
 
+            <Route exact path="/password/forgot" element={<ForgotPassword />} />
+
+            <Route
+              exact
+              path="/password/reset/:token"
+              element={<ResetPassword />}
+            />
+
+            <Route exact path="/cart" element={<Cart />}></Route>
+
+            {/* Protected Routes */}
+
             {isAuthenticated && (
               <>
-                <Route
-                  exact
-                  path="/account"
-                  element={<Profile></Profile>}
-                  // element={<ProtectedRoute element={Profile} />}
-                />
+                <Route exact path="/account" element={<Profile></Profile>} />
                 <Route exact path="/me/update" element={<UpdateProfile />} />
 
                 <Route
@@ -126,17 +154,10 @@ function App() {
                 <Route exact path="/shipping" element={<Shipping />} />
 
                 <Route exact path="/order/confirm" element={<ConfirmOrder />} />
+
+                <Route exact path="/orders" element={<MyOrders />} />
               </>
             )}
-
-            <Route exact path="/password/forgot" element={<ForgotPassword />} />
-            <Route
-              exact
-              path="/password/reset/:token"
-              element={<ResetPassword />}
-            />
-
-            <Route exact path="/cart" element={<Cart />}></Route>
           </Routes>
         </Header>
         <Footer></Footer>

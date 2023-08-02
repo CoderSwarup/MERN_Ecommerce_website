@@ -21,8 +21,8 @@ const UserOptions = ({ user }) => {
   const dispatch = useDispatch();
 
   const options = [
-    { icon: <ListAltOutlinedIcon />, name: "Orders", func: orders },
     { icon: <AccountBoxOutlinedIcon />, name: "Profile", func: account },
+    { icon: <ListAltOutlinedIcon />, name: "Orders", func: orders },
     {
       icon: (
         <ShoppingCartOutlinedIcon

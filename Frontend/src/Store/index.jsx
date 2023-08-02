@@ -4,9 +4,14 @@ import {
   ProfileReducer,
   UserReducer,
 } from "./Slice/UserSlice";
-import { ProductDetailsReducer, productsReducer } from "./Slice/ProductSlice";
+import {
+  ProductDetailsReducer,
+  ReviewReducer,
+  productsReducer,
+} from "./Slice/ProductSlice";
 import { CategoryReducer } from "./Slice/CategorySlice";
 import CartSlice from "./Slice/CartSlice";
+import { MyorderReducer, OrderReducer } from "./Slice/OrderSlice";
 
 const Store = configureStore({
   reducer: {
@@ -17,6 +22,9 @@ const Store = configureStore({
     categories: CategoryReducer,
     forgotpassword: ForgotPasswordReducer,
     cart: CartSlice,
+    order: OrderReducer,
+    myorders: MyorderReducer,
+    review: ReviewReducer,
   },
 });
 

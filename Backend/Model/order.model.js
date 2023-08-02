@@ -20,11 +20,11 @@ const OrderSchema = mongoose.Schema(
         required: true,
         default: "india",
       },
-      pincode: {
+      pinCode: {
         type: Number,
         required: true,
       },
-      mobile: {
+      phoneNo: {
         type: Number,
         required: true,
       },
@@ -61,15 +61,15 @@ const OrderSchema = mongoose.Schema(
         required: true,
       },
       status: {
-        type: Boolean,
-        require: false,
+        type: String,
+        require: true,
       },
     },
     paidAt: {
       type: Date,
       required: true,
     },
-    itemPrice: {
+    itemsPrice: {
       type: Number,
       default: 0,
     },

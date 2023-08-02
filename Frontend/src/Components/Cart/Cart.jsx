@@ -34,7 +34,6 @@ export default function Cart() {
   };
 
   const checkoutHandler = () => {
-    console.log("dd");
     if (isAuthenticated) {
       Navigate("/shipping");
     } else {

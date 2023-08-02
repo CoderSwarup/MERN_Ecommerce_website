@@ -79,7 +79,6 @@ export default function LoginSignup() {
   };
 
   const redirect = location.state ? location.state.from : "/account";
-  console.log(location.pathname);
   useEffect(() => {
     if (isAuthenticated) {
       history("/account", {

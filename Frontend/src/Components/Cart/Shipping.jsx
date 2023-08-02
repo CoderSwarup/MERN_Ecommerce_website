@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import HomeIcon from "@mui/icons-material/Home";
 import { Country, State } from "country-state-city";
@@ -14,6 +14,8 @@ import { toast } from "react-toastify";
 import { ShippingInfoSave } from "../../Store/Slice/CartSlice";
 import { useNavigate } from "react-router-dom";
 export default function Shipping() {
+  const cartItem = localStorage.getItem("cartItems");
+
   const dispatch = useDispatch();
   const Navigate = useNavigate();
   const { shippingInfo } = useSelector((state) => {
@@ -39,6 +41,13 @@ export default function Shipping() {
     );
     Navigate("/order/confirm");
   };
+
+  useEffect(() => {
+    if (!cartItem) {
+      Navigate("/cart");
+    }
+  }, []);
+
   return (
     <>
       <Metadata title={`Shipping | SamEcom`} />

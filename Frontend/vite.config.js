@@ -22,12 +22,19 @@ export default defineConfig({
       "/api/v1/products/all-products": BASE_URL,
       "/api/v1/products/single-product": BASE_URL,
 
+      //Product Review
+      "/api/v1/products/review": BASE_URL,
+
       //Category Routes
       "/api/v1/category/all-category": BASE_URL,
 
       //Payment routes
       "/api/v1/payment/stripeapikey": BASE_URL,
       "/api/v1/payment/process/payment": BASE_URL,
+
+      //Order Routes
+      "/api/v1/orders/order/new": BASE_URL,
+      "/api/v1/orders/myorder": BASE_URL,
     },
   },
 });

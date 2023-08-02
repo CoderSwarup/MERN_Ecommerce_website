@@ -1,7 +1,11 @@
 // productSlice.js
 
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProducts, getProductDetails } from "../Actions/ProductActions";
+import {
+  NewReview,
+  fetchProducts,
+  getProductDetails,
+} from "../Actions/ProductActions";
 
 // allproduct show reducer
 const productSlice = createSlice({
@@ -71,3 +75,38 @@ export const { reducer: ProductDetailsReducer } = productDetailsSlice;
 
 //--------------------------------------
 //--------------------------------------
+
+//review slice
+const ReviewSlice = createSlice({
+  name: "reviews",
+  initialState: {
+    loading: false,
+    Rerror: null,
+    Rmessage: null,
+  },
+  reducers: {
+    clearReviewError(state) {
+      state.Rerror = null;
+    },
+    clearReviewMsg(state) {
+      state.Rmessage = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(NewReview.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(NewReview.fulfilled, (state, action) => {
+        state.loading = false;
+        state.Rmessage = action.payload.message;
+      })
+      .addCase(NewReview.rejected, (state, action) => {
+        state.loading = false;
+        state.Rerror = action.error.message;
+      });
+  },
+});
+
+export const { clearReviewError, clearReviewMsg } = ReviewSlice.actions;
+export const { reducer: ReviewReducer } = ReviewSlice;

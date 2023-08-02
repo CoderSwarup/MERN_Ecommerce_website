@@ -30,3 +30,15 @@ export const getProductDetails = createAsyncThunk(
     }
   }
 );
+
+//Create a Review
+export const NewReview = createAsyncThunk("user/newreview", async (Data) => {
+  try {
+    const config = { headers: { "Content-Type": "application/json" } };
+    const { data } = await axios.put("/api/v1/products/review", Data, config);
+    console.log(data);
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getProductDetails } from "../../Store/Actions/ProductActions";
+import {
+  NewReview,
+  getProductDetails,
+} from "../../Store/Actions/ProductActions";
 import Loading from "../Layouts/Loader/Loading";
 import { toast } from "react-toastify";
 import Metadata from "../Layouts/MetaData/Metadata";
@@ -10,9 +13,21 @@ import Carousel from "react-material-ui-carousel";
 import "./ProductDetails.css";
 import ReactStars from "react-rating-stars-component";
 import ReviewCard from "./ReviewCard";
-import { clearError } from "../../Store/Slice/ProductSlice";
+import {
+  clearError,
+  clearReviewError,
+  clearReviewMsg,
+} from "../../Store/Slice/ProductSlice";
 import { AddtoCart } from "../../Store/Slice/CartSlice";
-
+import Typography from "@mui/material/Typography";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
+import Rating from "@mui/material/Rating";
 export default function ProductDetails() {
   const params = useParams();
   const dispatch = useDispatch();
@@ -83,6 +98,42 @@ export default function ProductDetails() {
     toast.success("Product Added");
   };
 
+  //Review Submission
+  const { Rerror, Rmessage } = useSelector((state) => {
+    return state.review;
+  });
+  const [open, setOpen] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  const submitReviewToggle = () => {
+    open ? setOpen(false) : setOpen(true);
+  };
+
+  const reviewSubmitHandler = (e) => {
+    e.preventDefault();
+    const myForm = new FormData();
+
+    myForm.set("rating", rating);
+    myForm.set("comment", comment);
+    myForm.set("productId", params.id);
+
+    dispatch(NewReview(myForm));
+
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (Rerror) {
+      toast.error(Rerror);
+      dispatch(clearReviewError());
+    }
+    if (Rmessage) {
+      toast.success(Rmessage);
+      dispatch(clearReviewMsg());
+    }
+  }, [Rerror, Rmessage]);
+
   const metaTitle = product?.name || "Product Details - Sam Ecommerce";
   const metaDescription =
     product?.description || "Discover the details of this amazing product.";
@@ -151,9 +202,46 @@ export default function ProductDetails() {
                 Description : <p>{product.description}</p>
               </div>
 
-              <button className="submitReview">Submit Review</button>
+              <button onClick={submitReviewToggle} className="submitReview">
+                Submit Review
+              </button>
             </div>
           </div>
+
+          {/*  */}
+          <Dialog
+            aria-labelledby="simple-dialog-title"
+            open={open}
+            onClose={submitReviewToggle}
+          >
+            <DialogTitle>
+              <Typography variant="overline">Submit Review</Typography>
+            </DialogTitle>
+            <DialogContent className="submitDialog">
+              <Rating
+                onChange={(e) => setRating(+e.target.value)}
+                value={rating}
+                size="large"
+              />
+
+              <textarea
+                className="submitDialogTextArea"
+                cols="30"
+                rows="5"
+                placeholder="Comment"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              ></textarea>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={submitReviewToggle} color="secondary">
+                Cancel
+              </Button>
+              <Button onClick={reviewSubmitHandler} color="primary">
+                Submit
+              </Button>
+            </DialogActions>
+          </Dialog>
 
           <h3 className="reviewsHeading">REVIEWS</h3>
           {product?.reviews && product?.reviews[0] ? (

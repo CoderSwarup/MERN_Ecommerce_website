@@ -30,7 +30,7 @@ exports.newOrderController = async (req, res) => {
 
     res.status(200).send({
       success: true,
-      message: "order is Created  ",
+      message: "order is Created",
       order,
     });
   } catch (error) {
