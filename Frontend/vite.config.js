@@ -35,6 +35,9 @@ export default defineConfig({
       //Order Routes
       "/api/v1/orders/order/new": BASE_URL,
       "/api/v1/orders/myorder": BASE_URL,
+
+      //Order Invoice
+      "/api/v1/orders/invoices/download": BASE_URL,
     },
   },
 });

@@ -7,6 +7,7 @@ const {
   GetAllOrdersAdmin,
   UpdateOrder,
   DeleteOrder,
+  IvoiceController,
 } = require("../Controller/orderController");
 
 const OrderRouter = express.Router();
@@ -34,5 +35,7 @@ OrderRouter.route("/delete/order/:id").delete(
   isAdmin,
   DeleteOrder
 );
+
+OrderRouter.route("/invoices/download/:id").get(IvoiceController);
 
 module.exports = OrderRouter;
