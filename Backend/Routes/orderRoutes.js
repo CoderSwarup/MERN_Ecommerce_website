@@ -18,19 +18,25 @@ OrderRouter.route("/order/new").post(isAuthicatedUser, newOrderController);
 OrderRouter.route("/myorder").get(isAuthicatedUser, GetMyOrder);
 
 //get all orders for admin
-OrderRouter.route("/getallorders").get(
+OrderRouter.route("/admin/getallorders").get(
   isAuthicatedUser,
   isAdmin,
   GetAllOrdersAdmin
 );
 
-OrderRouter.route("/update/order/:id").put(
+OrderRouter.route("/admin/orderdetails/:id").get(
+  isAuthicatedUser,
+  isAdmin,
+  GetUserOrdersByAdmin
+);
+
+OrderRouter.route("/admin/update/order/:id").put(
   isAuthicatedUser,
   isAdmin,
   UpdateOrder
 );
 
-OrderRouter.route("/delete/order/:id").delete(
+OrderRouter.route("/admin/delete-order/:id").delete(
   isAuthicatedUser,
   isAdmin,
   DeleteOrder

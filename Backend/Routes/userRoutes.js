@@ -49,6 +49,7 @@ userRouter
   .route("/admin/getallusers")
   .get(isAuthicatedUser, isAdmin, GetAllUserDeatils);
 
+//
 userRouter
   .route("/admin/getsingleuser/:id")
   .get(isAuthicatedUser, isAdmin, GetSingleUserDeatils);

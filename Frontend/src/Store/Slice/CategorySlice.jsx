@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchallCategory } from "../Actions/CategoryActions";
+import {
+  CreateNewCategory,
+  DeleteCategoryAction,
+  UpdateCategoryAction,
+  fetchallCategory,
+} from "../Actions/CategoryActions";
 
 const CategorySlice = createSlice({
   name: "categories",
@@ -7,6 +12,7 @@ const CategorySlice = createSlice({
     categories: [],
     loading: false,
     error: null,
+    message: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -18,9 +24,50 @@ const CategorySlice = createSlice({
       })
       .addCase(fetchallCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = action.payload;
+        state.categories = action.payload.category;
       })
       .addCase(fetchallCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    builder
+      .addCase(CreateNewCategory.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(CreateNewCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(CreateNewCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    //Delete Category
+    builder
+      .addCase(DeleteCategoryAction.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(DeleteCategoryAction.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(DeleteCategoryAction.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    //Update categrory
+    builder
+      .addCase(UpdateCategoryAction.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(UpdateCategoryAction.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(UpdateCategoryAction, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

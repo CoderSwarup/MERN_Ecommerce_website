@@ -1,9 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  DeleteUserAction,
+  GetAllUsersAction,
+  GetUserDetails,
   LoadUser,
   LogOut,
   LoginUser,
   RegisterUser,
+  UpdateUserRoleDetails,
 } from "../Actions/AuthAction";
 import {
   ForgotPasswordAPi,
@@ -105,7 +109,8 @@ const UserSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(LogOut.rejected, (state, action) => {
-        (state.loading = false), (state.error = action.error.message);
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
@@ -121,6 +126,7 @@ const ProfileSlice = createSlice({
     error: null,
     message: null,
     isUpdated: false,
+    isDeleted: false,
   },
   reducers: {
     ProfileClearMsg: (state) => ({
@@ -131,6 +137,14 @@ const ProfileSlice = createSlice({
       ...state,
       error: null,
     }),
+    Reset_Is_Updated: (state) => ({
+      ...state,
+      isUpdated: false,
+    }),
+    Reset_Is_Deleted: (state) => ({
+      ...state,
+      isDeleted: false,
+    }),
   },
   extraReducers: (builder) => {
     builder
@@ -138,8 +152,8 @@ const ProfileSlice = createSlice({
         (state.loading = true), (state.error = null), (state.message = null);
       })
       .addCase(ProfileUpdate.fulfilled, (state, action) => {
-        state.isUpdated = true;
         state.loading = false;
+        state.isUpdated = true;
         state.message = action.payload.message;
       })
       .addCase(ProfileUpdate.rejected, (state, action) => {
@@ -168,9 +182,50 @@ const ProfileSlice = createSlice({
           (state.message = null),
           (state.error = action.error.message);
       });
+
+    //Role Update
+    builder
+      .addCase(UpdateUserRoleDetails.pending, (state) => {
+        (state.loading = true),
+          (state.message = null),
+          (state.isUpdated = false),
+          (state.error = null);
+      })
+      .addCase(UpdateUserRoleDetails.fulfilled, (state, action) => {
+        (state.loading = false),
+          (state.isUpdated = true),
+          (state.message = action.payload.message);
+      })
+      .addCase(UpdateUserRoleDetails.rejected, (state, action) => {
+        (state.loading = false),
+          (state.isUpdated = false),
+          (state.message = null),
+          (state.error = action.error.message);
+      });
+
+    // delete User
+    builder
+      .addCase(DeleteUserAction.pending, (state) => {
+        state.loading = true;
+        state.message = null;
+        state.isDeleted = false;
+      })
+      .addCase(DeleteUserAction.fulfilled, (state, action) => {
+        (state.loading = false),
+          (state.isDeleted = true),
+          (state.message = action.payload.message);
+      })
+      .addCase(DeleteUserAction.rejected, (state, action) => {
+        state.loading = false;
+        state.isUpdated = false;
+        state.isDeleted = false;
+        state.message = null;
+        state.error = action.error.message;
+      });
   },
 });
-export const { ProfileClearErr, ProfileClearMsg } = ProfileSlice.actions;
+export const { ProfileClearErr, ProfileClearMsg, Reset_Is_Updated } =
+  ProfileSlice.actions;
 export const { reducer: ProfileReducer } = ProfileSlice;
 
 //Forgot Password Slice
@@ -226,3 +281,55 @@ export const { forgotclearError, forgotclearSuccess } =
   ForgotPasswordSlice.actions;
 
 export const { reducer: ForgotPasswordReducer } = ForgotPasswordSlice;
+
+const GetAllUserSlice = createSlice({
+  name: "GetAllUsers",
+  initialState: {
+    loading: false,
+    users: [],
+    error: null,
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(GetAllUsersAction.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(GetAllUsersAction.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload.alluser;
+      })
+      .addCase(GetAllUsersAction, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  },
+});
+
+export const { reducer: GetAllUserReducer } = GetAllUserSlice;
+
+const UserDetailsSlice = createSlice({
+  name: "UserDetails",
+  initialState: {
+    loading: false,
+    user: {},
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(GetUserDetails.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(GetUserDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+      })
+      .addCase(GetUserDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  },
+});
+
+export const { reducer: UserDetailsReducer } = UserDetailsSlice;

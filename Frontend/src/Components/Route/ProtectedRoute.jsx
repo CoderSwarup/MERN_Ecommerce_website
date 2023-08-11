@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Loading from "../Layouts/Loader/Loading";
 
-const ProtectedRoute = ({ element: Element }) => {
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
+const ProtectedRoute = () => {
+  const { isAuthenticated, user } = useSelector((state) => {
+    return state.user;
+  });
+  const Navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated === false || user?.user?.role !== "admin") {
+      Navigate("/signin");
+    }
+  });
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/signin" />;
-  }
-
-  return <Element />;
+  return isAuthenticated === true && user.user.role === "admin" ? (
+    <>
+      <Outlet></Outlet>
+    </>
+  ) : (
+    <Loading></Loading>
+  );
 };
 
 export default ProtectedRoute;

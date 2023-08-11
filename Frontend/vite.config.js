@@ -20,6 +20,9 @@ export default defineConfig({
       //Products ROute
       "/api/v1/products/single-productt": BASE_URL,
       "/api/v1/products/all-products": BASE_URL,
+      "/api/v1/products/admin/products": BASE_URL,
+      "/api/v1/products/admin/update-product": BASE_URL,
+      "/api/v1/products/admin/delete-product": BASE_URL,
       "/api/v1/products/single-product": BASE_URL,
 
       //Product Review
@@ -38,6 +41,21 @@ export default defineConfig({
 
       //Order Invoice
       "/api/v1/orders/invoices/download": BASE_URL,
+
+      //Admin Routes
+      "/api/v1/admin/getallusers": BASE_URL,
+      "/api/v1/admin/getsingleuser": BASE_URL,
+      "/api/v1/admin/updaterole": BASE_URL,
+      "/api/v1/admin/delete-user": BASE_URL,
+      "/api/v1/products/admin/products": BASE_URL,
+      "/api/v1/products/admin/get-reviews": BASE_URL,
+      "/api/v1/products/admin/delete-reviews": BASE_URL,
+      "/api/v1/orders/admin/getallorders": BASE_URL,
+      "/api/v1/orders/admin/orderdetails": BASE_URL,
+      "/api/v1/orders/admin/update/order": BASE_URL,
+      "/api/v1/category/admin/create-category": BASE_URL,
+      "/api/v1/category/admin/delete-category": BASE_URL,
+      "/api/v1/category/admin/update-category": BASE_URL,
     },
   },
 });

@@ -1,0 +1,98 @@
+.siderbar2 {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4rem 2rem 6rem;
+}
+
+.siderbar2 > a:first-child {
+  padding: 0;
+}
+.siderbar2 > a > img {
+  width: 20px;
+  transition: all 0.5s;
+}
+
+.siderbar2 > a > img:hover {
+  filter: drop-shadow(0 0 10px tomato);
+}
+.siderbar2 a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.493);
+  font: 200 1rem "Roboto";
+  padding: 2rem;
+  transition: all 0.5s;
+}
+.siderbar2 a:hover {
+  color: tomato;
+  transform: scale(1.1);
+}
+
+.siderbar2 a > P {
+  display: flex;
+  align-items: center;
+}
+.siderbar2 a > p > svg {
+  margin-right: 0.5rem;
+}
+
+.MuiTypography-root {
+  background-color: #fff !important;
+}
+
+/* Dropdown styles */
+.dropdown {
+  padding-left: 15px;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.dropdown.open .dropdown-toggle {
+  background-color: #f0f0f0; /* Change this to your desired background color */
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dropdown-toggle span {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 17px;
+  width: 100%;
+  background-color: rgba(
+    245,
+    166,
+    152,
+    0.936
+  ); /* Change this to your desired background color */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.sub-link {
+  display: flex;
+  align-items: center;
+  font-weight: 900;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #000000; /* Change this to your desired text color */
+  transition: background-color 0.3s;
+}
+
+.sub-link:hover {
+  background-color: #f0f0f0; /* Change this to your desired hover background color */
+}
+
+.sub-link span {
+  margin-left: 10px;
+}

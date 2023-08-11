@@ -9,7 +9,6 @@ const cloudinary = require("cloudinary");
 exports.RegisterUserController = async (req, res) => {
   try {
     const { name, email, password, mobile } = req.body;
-
     const validateEmail = validator.isEmail(email);
     // console.log(validateEmail);
     if (!validateEmail) {
@@ -27,7 +26,6 @@ exports.RegisterUserController = async (req, res) => {
         crop: "scale",
       });
     }
-
     const user = await usersModel({
       name,
       email,
@@ -316,7 +314,6 @@ exports.GetAllUserDeatils = async (req, res) => {
 exports.GetSingleUserDeatils = async (req, res) => {
   try {
     const user = await usersModel.findById(req.params.id);
-
     if (!user) {
       throw ErrorHandler.customError(`${req.params.id} User Not Found `, 201);
     }

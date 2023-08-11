@@ -36,57 +36,57 @@ export default function Header({ children }) {
       name: `${isAuthenticated ? "Account" : "SignIn"}`,
       icon: <BiSolidUserCircle />,
     },
-    {
-      path: "/analytics",
-      name: "Analytics",
-      icon: <BiAnalyse />,
-    },
-    {
-      path: "/file-manager",
-      name: "File Manager",
-      icon: <AiTwotoneFileExclamation />,
-      subRoutes: [
-        {
-          path: "/settings/profile",
-          name: "Profile ",
-          icon: <FaUser />,
-        },
-        {
-          path: "/settings/2fa",
-          name: "2FA",
-          icon: <FaLock />,
-        },
-        {
-          path: "/settings/billing",
-          name: "Billing",
-          icon: <FaMoneyBill />,
-        },
-      ],
-    },
+    // {
+    //   path: "/analytics",
+    //   name: "Analytics",
+    //   icon: <BiAnalyse />,
+    // },
+    // {
+    //   path: "/file-manager",
+    //   name: "File Manager",
+    //   icon: <AiTwotoneFileExclamation />,
+    //   subRoutes: [
+    //     {
+    //       path: "/settings/profile",
+    //       name: "Profile ",
+    //       icon: <FaUser />,
+    //     },
+    //     {
+    //       path: "/settings/2fa",
+    //       name: "2FA",
+    //       icon: <FaLock />,
+    //     },
+    //     {
+    //       path: "/settings/billing",
+    //       name: "Billing",
+    //       icon: <FaMoneyBill />,
+    //     },
+    //   ],
+    // },
     {
       path: "/cart",
       name: "Cart",
       icon: <BsCartCheck />,
     },
-    {
-      path: "/settings",
+    isAuthenticated && {
+      path: "/accout",
       name: "Settings",
       icon: <BiCog />,
       exact: true,
       subRoutes: [
         {
-          path: "/settings/profile",
+          path: "/account",
           name: "Profile ",
           icon: <FaUser />,
         },
         {
-          path: "/settings/2fa",
-          name: "2FA",
+          path: "/password/update",
+          name: "Update Password",
           icon: <FaLock />,
         },
         {
-          path: "/settings/billing",
-          name: "Billing",
+          path: "/me/update",
+          name: "Update Profile",
           icon: <FaMoneyBill />,
         },
       ],

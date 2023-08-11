@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { LoadUser } from "./Store/Actions/AuthAction";
 import { clearError, clearMessage } from "./Store/Slice/UserSlice";
 import UserOptions from "./Components/Layouts/Hearder/UserOptions";
-import ProtectedRoute from "./Components/Route/ProtectedRoute";
 import Profile from "./Components/User/Profile";
 import UpdateProfile from "./Components/User/UpdateProfile";
 import UpdatePassword from "./Components/User/UpdatePassword";
@@ -29,6 +28,17 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import OrderSuccess from "./Components/Cart/OrderSuccess";
 import MyOrders from "./Components/Order/Myorder";
+import ProtectedRoute from "./Components/Route/ProtectedRoute";
+import Dashboard from "./Components/Admin/Dashboard";
+import UsersList from "./Components/Admin/UsersListDashBoard";
+import UpdateUser from "./Components/Admin/UpadateUser";
+import ProductReview from "./Components/Admin/ProductReview";
+import OrderList from "./Components/Admin/OrderList";
+import ProcessOrder from "./Components/Admin/ProcessOrder";
+import PageNotFound from "./Components/Layouts/PageNotFound/PageNotFound";
+import CategoryPage from "./Components/Admin/CategoryPage";
+import ProductList from "./Components/Admin/ProductList";
+import UpdateProduct from "./Components/Admin/UpdateProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -142,6 +152,7 @@ function App() {
 
             {isAuthenticated && (
               <>
+                {/* User Routes */}
                 <Route exact path="/account" element={<Profile></Profile>} />
                 <Route exact path="/me/update" element={<UpdateProfile />} />
 
@@ -156,8 +167,27 @@ function App() {
                 <Route exact path="/order/confirm" element={<ConfirmOrder />} />
 
                 <Route exact path="/orders" element={<MyOrders />} />
+
+                {/* Admin Routes */}
+                <Route exact path="/admin" element={<ProtectedRoute />}>
+                  <Route
+                    path="dashboard"
+                    element={<Dashboard></Dashboard>}
+                  ></Route>
+                  <Route exact path="users" element={<UsersList></UsersList>} />
+                  <Route exact path="user/:id" element={<UpdateUser />} />
+                  <Route exact path="reviews" element={<ProductReview />} />
+                  <Route exact path="orders" element={<OrderList />} />
+                  <Route exact path="order/:id" element={<ProcessOrder />} />
+                  <Route exact path="ctegory" element={<CategoryPage />} />
+                  <Route exact path="products" element={<ProductList />} />
+                  <Route exact path="product/:id" element={<UpdateProduct />} />
+                </Route>
+
+                {/* Admin Routes End */}
               </>
             )}
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Header>
         <Footer></Footer>

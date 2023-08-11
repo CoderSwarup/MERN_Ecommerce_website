@@ -59,8 +59,16 @@ exports.GetMyOrder = async (req, res) => {
 exports.GetUserOrdersByAdmin = async (req, res) => {
   try {
     const order = await orderModel
-      .find({ user: req.params.id })
-      .populate("user", "name email");
+      .findById(req.params.id)
+      .populate({
+        path: "orderItems.product",
+        select: "name email images", // Include specific fields from the product
+      })
+      .exec();
+
+    if (!order) {
+      throw ErrorHandler.customError("Order Not Found", 400);
+    }
 
     res.status(200).json({
       success: true,
@@ -68,6 +76,7 @@ exports.GetUserOrdersByAdmin = async (req, res) => {
       order,
     });
   } catch (error) {
+    console.log(error);
     ThrowError(error, res, "Getting Single Order");
   }
 };
@@ -101,18 +110,18 @@ exports.UpdateOrder = async (req, res) => {
     if (!order) {
       throw ErrorHandler.customError("Order Not Found ", 404);
     }
-
-    if (order.orderStatus === "delivered") {
+    if (order.orderStatus === "Delivered") {
       throw ErrorHandler.customError("Order Delivered Already", 404);
     }
 
     //update the status of order to delivered and save it in database
+    if (req.body.status === "Shipped") {
+      order.orderItems.forEach(async (order) => {
+        await updateStock(order.product, order.quantity);
+      });
+    }
 
-    order.orderItems.forEach(async (order) => {
-      await updateStock(order.product, order.quantity);
-    });
-
-    order.orderStatus = req.body.new_status || order.orderStatus;
+    order.orderStatus = req.body.status || order.orderStatus;
     if (req.body.new_status == "delivered") {
       order.deliveredAt = new Date(Date.now());
     }

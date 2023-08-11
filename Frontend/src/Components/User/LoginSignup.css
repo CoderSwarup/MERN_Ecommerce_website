@@ -160,7 +160,14 @@
 .shiftToRight {
   transform: translateX(100%);
 }
+.Select select {
+  width: 100%;
+  padding: 10px;
+}
 
+.Select select option {
+  padding: 2.5vmax 5vmax;
+}
 @media screen and (max-width: 600px) {
   .LoginSignUpContainer {
     background-color: white;

@@ -9,6 +9,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const PaymentRouter = require("./Routes/PaymentRoute");
+
 //middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -16,9 +17,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
 //error middleware // No need this
-app.use(function (error, rq, res, next) {
-  console.log("errro");
-});
+// app.use(function (error, rq, res, next) {
+//   console.log(error);
+// });
 
 // Routes
 app.use("/api/v1/category", CategoryRouter);

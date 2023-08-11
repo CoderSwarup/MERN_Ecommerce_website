@@ -3,6 +3,7 @@ const productModel = require("../Model/product.model");
 const ApiFeatures = require("../utils/ApiFeatures");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { ThrowError } = require("../utils/ErrorHelper");
+const cloudinary = require("cloudinary");
 //create Product  => Admin
 exports.createProduct = async (req, res) => {
   try {
@@ -35,27 +36,68 @@ exports.createProduct = async (req, res) => {
 //update product => admin
 exports.updateProductController = async (req, res) => {
   try {
-    const id = req.params.id;
+    let product = await productModel.findById(req.params.id);
 
-    let product = await productModel.findById(id);
-    // console.log(id, product);
     if (!product) {
-      return res.status(500).send({
-        success: false,
-        message: "Product Not Found ",
-      });
+      throw ErrorHandler.customError("Product not found", 404);
     }
 
-    product = await productModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-      useFindAndmodify: false,
-    });
+    product.name = req.body.name || product.name;
+    product.description = req.body.description || product.description;
+    product.price = req.body.price || product.price;
+    product.stock = req.body.stock || product.stock;
+    // Images Start Here
+    console.log(typeof req.body.images);
 
+    if (req.body.images) {
+      const imagesLinks = [];
+
+      if (typeof req.body.images === "string") {
+        // Single image provided
+        const result = await cloudinary.v2.uploader.upload(req.body.images, {
+          folder: "samecomm",
+        });
+
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        });
+      } else if (Array.isArray(req.body.images)) {
+        // Multiple images provided
+        for (let i = 0; i < req.body.images.length; i++) {
+          const result = await cloudinary.v2.uploader.upload(
+            req.body.images[i],
+            {
+              folder: "samecomm",
+            }
+          );
+
+          imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        }
+      }
+
+      // Add existing images to the array
+      if (product.images) {
+        product.images.forEach((image) => {
+          imagesLinks.push({
+            public_id: image.public_id,
+            url: image.url,
+          });
+        });
+      }
+
+      product.images = imagesLinks;
+    }
+    await product.save();
+
+    console.log("out");
     res.status(201).send({
       success: true,
       message: `The Product  been updated successfully`,
-      product,
+      // product,
     });
   } catch (error) {
     ThrowError(error, res, "updating Product");
@@ -211,6 +253,15 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
+//Admin all product
+exports.getAlladminProducts = async (req, res) => {
+  const products = await productModel.find();
+  res.status(200).send({
+    success: true,
+    products,
+  });
+};
+
 exports.CreateProductReviewController = async (req, res) => {
   try {
     const { rating, comment, productId } = req.body;
@@ -274,22 +325,30 @@ exports.GetProductAllRviews = async (req, res) => {
 //deleting product review
 exports.DeleteProductReviews = async (req, res) => {
   try {
+    // if (!req.query.reviewid || req.query.reviewid === "") {
+    //   throw ErrorHandler.customError("Please Provide the Review Id", 400);
+    // }
     const product = await productModel.findById(req.params.id);
 
     if (!product) {
       throw ErrorHandler.customError("Product Not Found", 404);
     }
-
     let reviews = product.reviews.filter((rev) => {
       return rev._id.toString() !== req.query.reviewid.toString();
     });
 
     let avg = 0;
+    let validReviewsCount = 0;
+
     reviews.forEach((rev) => {
-      avg += rev.rating;
+      if (!isNaN(rev.rating)) {
+        avg += rev.rating;
+        validReviewsCount++;
+      }
     });
-    const ratings = avg / reviews.length;
-    const numofreviews = reviews.length;
+
+    const ratings = validReviewsCount > 0 ? avg / validReviewsCount : 0;
+    const numofreviews = validReviewsCount;
 
     await productModel.findByIdAndUpdate(
       req.params.id,
@@ -306,6 +365,7 @@ exports.DeleteProductReviews = async (req, res) => {
       message: "Review deleted successfully",
     });
   } catch (error) {
+    console.log(error);
     ThrowError(error, res, "Delete Review Product");
   }
 };

@@ -8,6 +8,7 @@ const {
   CreateProductReviewController,
   GetProductAllRviews,
   DeleteProductReviews,
+  getAlladminProducts,
 } = require("../Controller/productsController");
 const { isAuthicatedUser, isAdmin } = require("../middleware/auth");
 
@@ -49,10 +50,18 @@ productRouter
   .put(isAuthicatedUser, CreateProductReviewController);
 
 //get all reviews of th product
-productRouter.route("/get-reviews/:id").get(GetProductAllRviews);
+productRouter
+  .route("/admin/get-reviews/:id")
+  .get(isAuthicatedUser, isAdmin, GetProductAllRviews);
 
 //delete review
 productRouter
-  .route("/delete-reviews/:id")
-  .delete(isAuthicatedUser, DeleteProductReviews);
+  .route("/admin/delete-reviews/:id")
+  .delete(isAuthicatedUser, isAdmin, DeleteProductReviews);
+
+//Get all admin product
+productRouter
+  .route("/admin/products")
+  .get(isAuthicatedUser, isAdmin, getAlladminProducts);
+
 module.exports = productRouter;

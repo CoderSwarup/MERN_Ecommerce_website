@@ -59,3 +59,56 @@ export const LogOut = createAsyncThunk("user/logout", async () => {
     throw new Error(error.response.data.message);
   }
 });
+
+//Admin get all users
+export const GetAllUsersAction = createAsyncThunk("admin/users", async () => {
+  try {
+    const { data } = await axios.get(`/api/v1/admin/getallusers`);
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});
+
+//GetUserDetails
+export const GetUserDetails = createAsyncThunk(
+  "admin/userDetails",
+  async (id) => {
+    try {
+      const { data } = await axios.get(`/api/v1/admin/getsingleuser/${id}`);
+      return data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+//Update User Details
+export const UpdateUserRoleDetails = createAsyncThunk(
+  "admin/updateUser",
+  async ([id, Data]) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.put(
+        `/api/v1/admin/updaterole/${id}`,
+        Data,
+        config
+      );
+      return data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const DeleteUserAction = createAsyncThunk(
+  "admin/deleteuser",
+  async (id) => {
+    try {
+      const { data } = await axios.delete(`/api/v1/admin/delete-user/${id}`);
+      return data;
+    } catch (error) {
+      throw new Error(error.response.message);
+    }
+  }
+);

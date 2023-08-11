@@ -8,21 +8,22 @@ const {
 const { isAuthicatedUser, isAdmin } = require("../middleware/auth");
 const CategoryRouter = express.Router();
 
-CategoryRouter.route("/create-category").post(
+CategoryRouter.route("/admin/create-category").post(
   isAuthicatedUser,
   isAdmin,
   categorycontroller
 );
 
-CategoryRouter.route("/update-category/:id").put(
+CategoryRouter.route("/admin/update-category/:id").put(
   isAuthicatedUser,
+
   isAdmin,
   updatecategorycontroller
 );
 
 CategoryRouter.route("/all-category").get(categoryallcontroller);
 
-CategoryRouter.route("/delete-category/:id").delete(
+CategoryRouter.route("/admin/delete-category/:id").delete(
   isAuthicatedUser,
   isAdmin,
   deleteCategorycontroller

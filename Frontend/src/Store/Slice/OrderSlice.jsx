@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CreateNewOrder, FetchMyorders } from "../Actions/OrderActions";
+import {
+  CreateNewOrder,
+  FetchMyorders,
+  GetOrderDetailsAction,
+  UpdateOrderStatus,
+  fetchAdminOrders,
+} from "../Actions/OrderActions";
 const OrderSlice = createSlice({
   name: "orders",
   initialState: {
@@ -41,6 +47,22 @@ const OrderSlice = createSlice({
         state.success = false;
         state.error = action.error.message;
       });
+
+    //Admin orders
+    builder
+      .addCase(fetchAdminOrders.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAdminOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload.orders;
+      })
+      .addCase(fetchAdminOrders.rejected, (state) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    //Delete The Order
   },
 });
 
@@ -80,3 +102,64 @@ const MyorderSlice = createSlice({
 
 export const { ClearMyorderErr } = MyorderSlice.actions;
 export const { reducer: MyorderReducer } = MyorderSlice;
+
+const OrderDetailsSlice = createSlice({
+  name: "orderdetails",
+  initialState: {
+    order: {},
+    message: null,
+    error: null,
+    loading: false,
+    isUpdated: false,
+  },
+  reducers: {
+    ClrOrderDetailserr: (state) => ({
+      ...state,
+      error: null,
+    }),
+    Reset_order_Updated: (state) => ({
+      ...state,
+      isUpdated: false,
+    }),
+    ClrOrderDetailsMsg: (state) => ({
+      ...state,
+      message: null,
+    }),
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(GetOrderDetailsAction.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(GetOrderDetailsAction.fulfilled, (state, action) => {
+        state.loading = false;
+        state.order = action.payload.order;
+        state.message = action.payload.message;
+      })
+      .addCase(GetOrderDetailsAction.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    // Update order Status
+    builder
+      .addCase(UpdateOrderStatus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(UpdateOrderStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+        state.isUpdated = action.payload.success;
+      })
+      .addCase(UpdateOrderStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.isUpdated = false;
+        state.error = action.error.message;
+      });
+  },
+});
+
+export const { ClrOrderDetailsMsg, ClrOrderDetailserr, Reset_order_Updated } =
+  OrderDetailsSlice.actions;
+export const { reducer: OrderDetailsReducer } = OrderDetailsSlice;
