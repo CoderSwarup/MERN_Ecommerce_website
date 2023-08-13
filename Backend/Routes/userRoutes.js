@@ -12,6 +12,7 @@ const {
   GetSingleUserDeatils,
   UpdateUserRole,
   DeleteUser,
+  RefreshTokenController,
 } = require("../Controller/userControllers");
 const { isAuthicatedUser, isAdmin } = require("../middleware/auth");
 const userRouter = express.Router();
@@ -32,6 +33,7 @@ userRouter.route("/password/reset/:token").put(ResetPasswordController);
 
 //geting User Profile
 userRouter.route("/myprofile").get(isAuthicatedUser, GetUserDeatils);
+userRouter.route("/refresh-token").get(RefreshTokenController);
 
 //update password
 userRouter

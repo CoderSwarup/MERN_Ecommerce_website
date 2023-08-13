@@ -11,6 +11,7 @@ export default defineConfig({
       "/api/v1/login": BASE_URL,
       "/api/v1/register": BASE_URL,
       "/api/v1/myprofile": BASE_URL,
+      "/api/v1/refresh-token": BASE_URL,
       "/api/v1/logout": BASE_URL,
       "/api/v1/update-profile": BASE_URL,
       "/api/v1/password/update": BASE_URL,
@@ -20,7 +21,7 @@ export default defineConfig({
       //Products ROute
       "/api/v1/products/single-productt": BASE_URL,
       "/api/v1/products/all-products": BASE_URL,
-      "/api/v1/products/admin/products": BASE_URL,
+      // "/api/v1/products/admin/products": BASE_URL,
       "/api/v1/products/admin/update-product": BASE_URL,
       "/api/v1/products/admin/delete-product": BASE_URL,
       "/api/v1/products/single-product": BASE_URL,

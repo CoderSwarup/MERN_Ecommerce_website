@@ -35,19 +35,45 @@ export const RegisterUser = createAsyncThunk(
   }
 );
 
-//Loduser Action
-export const LoadUser = createAsyncThunk("user/loaduser", async () => {
-  // Destructure the arguments into email and password
-  try {
-    const config = { headers: { "Content-Type": "application/json" } };
-    const { data } = await axios.get("/api/v1/myprofile");
-    // console.log(data);
-    return data;
-  } catch (error) {
-    // console.log(error.response.data.message);
-    throw new Error(error.response.data.message);
+//Get Refresh Token
+export const RefreshAccessToken = createAsyncThunk(
+  "user/refresh-token",
+  async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/refresh-token`);
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.response.data.message);
+    }
   }
-});
+);
+
+//Loduser Action
+export const LoadUser = createAsyncThunk(
+  "user/loaduser",
+  async (_, thunkAPI) => {
+    // Destructure the arguments into email and password
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.get("/api/v1/myprofile");
+      // console.log(data);
+      return data;
+    } catch (error) {
+      if (error.response.data.message === "Token Expire Please Login") {
+        try {
+          await thunkAPI.dispatch(RefreshAccessToken());
+          // Retry loading user data after refreshing the token
+          const { data } = await axios.get("/api/v1/myprofile");
+          return data;
+        } catch (refreshError) {
+          throw new Error(refreshError.response.data.message);
+        }
+      }
+      throw new Error(error.response.data.message);
+    }
+  }
+);
 
 //Logout User
 export const LogOut = createAsyncThunk("user/logout", async () => {

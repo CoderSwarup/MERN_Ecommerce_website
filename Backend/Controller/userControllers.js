@@ -5,7 +5,7 @@ const sendToken = require("../utils/JWTtoken");
 const { ThrowError } = require("../utils/ErrorHelper");
 const { SendEmail } = require("../utils/sendEamil");
 const cloudinary = require("cloudinary");
-
+const JWT = require("jsonwebtoken");
 exports.RegisterUserController = async (req, res) => {
   try {
     const { name, email, password, mobile } = req.body;
@@ -84,6 +84,7 @@ exports.loginUserController = async (req, res) => {
 
     sendToken(user, 200, "login Succcessfully", res);
   } catch (error) {
+    console.log(error);
     ThrowError(error, res, "Login");
   }
 };
@@ -91,16 +92,23 @@ exports.loginUserController = async (req, res) => {
 //logout fucntionallity
 exports.LogoutUserController = async (req, res) => {
   try {
-    res.cookie("token", null, {
-      expires: new Date(Date.now()),
-      httpOnly: true,
-    });
-    res.status(200).send({
-      success: true,
-      message: "logout Successfully",
-    });
+    res
+      .cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      })
+      .cookie("refreshToken", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      })
+      .status(200)
+      .send({
+        success: true,
+        message: "logout Successfully",
+      });
   } catch (error) {
     // res.status(error.status).send(error);
+    console.log(error);
     ThrowError(error, res, "Logout");
   }
 };
@@ -211,6 +219,38 @@ exports.GetUserDeatils = async (req, res) => {
     });
   } catch (error) {
     ThrowError(error, res, "Getting user Details");
+  }
+};
+
+// Refresh token
+exports.RefreshTokenController = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res
+        .status(400)
+        .send({ success: false, message: "Refresh Token Not found" });
+    }
+
+    const decoded = JWT.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const user = await usersModel.findById(decoded._id);
+
+    if (!user) {
+      return res
+        .status(401)
+        .send({ success: false, message: "User Not Found" });
+    }
+
+    sendToken(user, 200, "", res);
+  } catch (error) {
+    if (error instanceof JWT.TokenExpiredError) {
+      return res.status(404).send({
+        success: false,
+        message: "Token Expire Please Login",
+      });
+    } else {
+      ThrowError(error, res, "Authetication Time");
+    }
   }
 };
 

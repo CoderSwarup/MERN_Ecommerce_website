@@ -3,19 +3,28 @@ dotenv.config();
 
 const sendToken = (user, status, msg, res) => {
   const token = user.getJWTToken();
+  const refreshtoken = user.generateRefreshToken();
 
-  //option for cookie
-  const options = {
-    expires: process.env.COOKIE_EXPRIE, // new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) 3 days;  new Date(Date.now() + 10 * 60 * 1000)// 10 minutes
+  const accessTokenOptions = {
+    expires: new Date(Date.now() + 15 * 60 * 1000), // Access token expiration: 15 minutes
     httpOnly: true,
   };
-  res.status(status).cookie("token", token).send({
-    success: true,
-    message: msg,
-    user,
-    // token,
-    // options,
-  });
+
+  const refreshTokenOptions = {
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Refresh token expiration: 7 days
+    httpOnly: true,
+  };
+
+  // Set access token and refresh token as separate cookies
+  res
+    .status(status)
+    .cookie("token", token, accessTokenOptions)
+    .cookie("refreshToken", refreshtoken, refreshTokenOptions)
+    .send({
+      success: true,
+      message: msg,
+      user,
+    });
 };
 
 module.exports = sendToken;
