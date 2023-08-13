@@ -2,6 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  CreateNewProduct,
   DeleteProductReview,
   GetAllAdminProduct,
   GetProductReviews,
@@ -88,6 +89,20 @@ const productSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(deleteProductAction.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    //Create A Product
+    builder
+      .addCase(CreateNewProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(CreateNewProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(CreateNewProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

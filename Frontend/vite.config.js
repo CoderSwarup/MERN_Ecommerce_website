@@ -24,6 +24,7 @@ export default defineConfig({
       "/api/v1/products/admin/update-product": BASE_URL,
       "/api/v1/products/admin/delete-product": BASE_URL,
       "/api/v1/products/single-product": BASE_URL,
+      "/api/v1/products/admin/create-product": BASE_URL,
 
       //Product Review
       "/api/v1/products/review": BASE_URL,

@@ -135,8 +135,7 @@ export default function ProductDetails() {
   }, [Rerror, Rmessage]);
 
   const metaTitle = product?.name || "Product Details - Sam Ecommerce";
-  const metaDescription =
-    product?.description || "Discover the details of this amazing product.";
+  const metaDescription = "Discover the details of this amazing product.";
   return (
     <>
       {loading ? (
@@ -198,8 +197,11 @@ export default function ProductDetails() {
                 </p>
               </div>
 
-              <div className="detailsBlock-4">
-                Description : <p>{product.description}</p>
+              <div
+                className="detailsBlock-4"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              >
+                {/* Description : <p>{product.description}</p> */}
               </div>
 
               <button onClick={submitReviewToggle} className="submitReview">

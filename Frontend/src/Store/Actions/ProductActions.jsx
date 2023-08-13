@@ -18,6 +18,24 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+// Craeate Products
+export const CreateNewProduct = createAsyncThunk(
+  "admin/create-product",
+  async (Data) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.post(
+        `/api/v1/products/admin/create-product`,
+        Data,
+        config
+      );
+      return data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 //FetAlladming Products
 export const getAllAdmingProducts = createAsyncThunk(
   "admin/products",

@@ -39,6 +39,8 @@ import PageNotFound from "./Components/Layouts/PageNotFound/PageNotFound";
 import CategoryPage from "./Components/Admin/CategoryPage";
 import ProductList from "./Components/Admin/ProductList";
 import UpdateProduct from "./Components/Admin/UpdateProduct";
+import CreateProduct from "./Components/Admin/CreateProduct";
+import NewProduct from "./Components/Admin/NewProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -182,6 +184,7 @@ function App() {
                   <Route exact path="ctegory" element={<CategoryPage />} />
                   <Route exact path="products" element={<ProductList />} />
                   <Route exact path="product/:id" element={<UpdateProduct />} />
+                  <Route exact path="create-product" element={<NewProduct />} />
                 </Route>
 
                 {/* Admin Routes End */}

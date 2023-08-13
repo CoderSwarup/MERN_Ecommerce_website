@@ -8,27 +8,52 @@ const cloudinary = require("cloudinary");
 exports.createProduct = async (req, res) => {
   try {
     req.body.createdBy = req.user._id;
-    const product = await productModel(req.body);
+    const product = req.body;
 
-    product
-      .save()
-      .then(() => {
-        res.status(201).send({
-          success: true,
-          message: "Created successfully",
-          product,
+    if (req.body.images) {
+      const imagesLinks = [];
+
+      if (typeof req.body.images === "string") {
+        // Single image provided
+        const result = await cloudinary.v2.uploader.upload(req.body.images, {
+          folder: "samecomm",
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).send({
-          status: false,
-          message: "All Fields Are Required",
+
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
         });
-      });
+      } else if (Array.isArray(req.body.images)) {
+        // Multiple images provided
+        for (let i = 0; i < req.body.images.length; i++) {
+          const result = await cloudinary.v2.uploader.upload(
+            req.body.images[i],
+            {
+              folder: "samecomm",
+            }
+          );
+
+          imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        }
+      }
+
+      product.images = imagesLinks;
+    }
+    console.log(product);
+    const NewProduct = await productModel(product);
+    await NewProduct.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Product Is Created Successfully",
+    });
 
     // ValidationError
   } catch (error) {
+    console.log(error);
     ThrowError(error, res, "creating Product");
   }
 };
@@ -110,9 +135,17 @@ exports.deleteProductcontroller = async (req, res) => {
     const id = req.params.id;
 
     let product = await productModel.findById(id);
+
     // console.log(id, product);
     if (!product) {
       throw ErrorHandler.NotFoundError("Product Not Found ");
+    }
+
+    if (product.images) {
+      console.log("cominnfgf");
+      product.images.map(async (data) => {
+        await cloudinary.v2.uploader.destroy(data.public_id);
+      });
     }
 
     await productModel.findByIdAndDelete(id);
