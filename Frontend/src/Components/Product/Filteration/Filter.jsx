@@ -44,7 +44,7 @@ export default function Filter({
   };
 
   const ResetFilter = () => {
-    setValue([0, 2000]);
+    setValue([0, 40000]);
     setSelectedCategories([]);
     setrating(0);
   };
@@ -79,7 +79,7 @@ export default function Filter({
             valueLabelDisplay="auto"
             getAriaValueText={valuetext}
             min={0}
-            max={2000}
+            max={40000}
           />
         </div>
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./sidebar.css";
 
-import logo from "../../assets/react.svg";
+import logo from "../../assets/Imges/Logo.jpg";
 import { Link } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PostAddIcon from "@mui/icons-material/PostAdd";
@@ -39,7 +39,12 @@ export default function siderbar2() {
     <div className="siderbar2">
       <Link to="/">
         <p>
-          <img src={logo} alt="Ecommerce" />
+          <img
+            width={150}
+            style={{ marginLeft: "17px" }}
+            src={logo}
+            alt="Ecommerce"
+          />
         </p>{" "}
       </Link>
       <Link to="/admin/dashboard">

@@ -9,6 +9,14 @@ const JWT = require("jsonwebtoken");
 exports.RegisterUserController = async (req, res) => {
   try {
     const { name, email, password, mobile } = req.body;
+
+    const registeruser = await usersModel.findOne({ email });
+    if (registeruser) {
+      return res.status(400).send({
+        success: false,
+        message: "User is Already Register",
+      });
+    }
     const validateEmail = validator.isEmail(email);
     // console.log(validateEmail);
     if (!validateEmail) {
@@ -56,6 +64,7 @@ exports.RegisterUserController = async (req, res) => {
         }
       });
   } catch (error) {
+    console.log(error);
     ThrowError(error, res, "Registration");
   }
 };
@@ -84,7 +93,6 @@ exports.loginUserController = async (req, res) => {
 
     sendToken(user, 200, "login Succcessfully", res);
   } catch (error) {
-    console.log(error);
     ThrowError(error, res, "Login");
   }
 };

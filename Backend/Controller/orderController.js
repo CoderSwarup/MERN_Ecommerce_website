@@ -106,10 +106,10 @@ exports.GetAllOrdersAdmin = async (req, res) => {
 exports.UpdateOrder = async (req, res) => {
   try {
     const order = await orderModel.findById(req.params.id);
-
     if (!order) {
       throw ErrorHandler.customError("Order Not Found ", 404);
     }
+
     if (order.orderStatus === "Delivered") {
       throw ErrorHandler.customError("Order Delivered Already", 404);
     }
@@ -135,6 +135,10 @@ exports.UpdateOrder = async (req, res) => {
 
     async function updateStock(id, quantity) {
       const product = await productModel.findById(id);
+      if (!product) {
+        throw ErrorHandler.customError("Product Will Not Found Soory ", 400);
+      }
+
       product.stock -= quantity;
 
       await product.save({ validateBeforeSave: false });
@@ -188,7 +192,7 @@ exports.IvoiceController = async (req, res) => {
     });
 
     // Add content and styles to the PDF (customize according to your invoice data and style)
-    let url = path.join(__dirname, "./download.png");
+    let url = path.join(__dirname, "./download.jpg");
 
     //Pdf Header
     doc

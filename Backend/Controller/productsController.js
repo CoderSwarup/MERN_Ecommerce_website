@@ -42,7 +42,6 @@ exports.createProduct = async (req, res) => {
 
       product.images = imagesLinks;
     }
-    console.log(product);
     const NewProduct = await productModel(product);
     await NewProduct.save();
 
@@ -66,13 +65,18 @@ exports.updateProductController = async (req, res) => {
     if (!product) {
       throw ErrorHandler.customError("Product not found", 404);
     }
+    if (req.body.stock < 0) {
+      throw ErrorHandler.customError(
+        "Product Stock Must be grater Than 0",
+        400
+      );
+    }
 
     product.name = req.body.name || product.name;
     product.description = req.body.description || product.description;
     product.price = req.body.price || product.price;
     product.stock = req.body.stock || product.stock;
     // Images Start Here
-    console.log(typeof req.body.images);
 
     if (req.body.images) {
       const imagesLinks = [];
@@ -118,13 +122,13 @@ exports.updateProductController = async (req, res) => {
     }
     await product.save();
 
-    console.log("out");
     res.status(201).send({
       success: true,
       message: `The Product  been updated successfully`,
       // product,
     });
   } catch (error) {
+    console.log(error);
     ThrowError(error, res, "updating Product");
   }
 };

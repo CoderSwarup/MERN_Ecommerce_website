@@ -41,6 +41,8 @@ import ProductList from "./Components/Admin/ProductList";
 import UpdateProduct from "./Components/Admin/UpdateProduct";
 import CreateProduct from "./Components/Admin/CreateProduct";
 import NewProduct from "./Components/Admin/NewProduct";
+import About from "./Components/Layouts/About/About";
+import Cursor from "./Components/Layouts/Cursor/Cursor";
 
 function App() {
   const dispatch = useDispatch();
@@ -92,9 +94,15 @@ function App() {
     // For now, we'll just return 'true' to suppress all errors.
     return true;
   };
+
+  //Right CLick Prevent
+  addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+  });
   return (
     <>
       <BrowserRouter>
+        <Cursor></Cursor>
         <Header>
           {isAuthenticated && (
             <>
@@ -121,6 +129,8 @@ function App() {
               )}
             </>
           )}
+
+          {/* Publiv paths */}
           <Routes>
             <Route path="/" element={<Home></Home>}></Route>
             <Route
@@ -149,6 +159,9 @@ function App() {
             />
 
             <Route exact path="/cart" element={<Cart />}></Route>
+
+            <Route exact path="/about" element={<About />}></Route>
+            {/* Publci path end */}
 
             {/* Protected Routes */}
 

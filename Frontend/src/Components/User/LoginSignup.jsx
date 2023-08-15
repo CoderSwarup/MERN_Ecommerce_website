@@ -11,6 +11,8 @@ import { LoginUser, RegisterUser } from "../../Store/Actions/AuthAction";
 import { toast } from "react-toastify";
 import Loading from "../Layouts/Loader/Loading";
 import { clearMessage } from "../../Store/Slice/UserSlice";
+import { Typography } from "@mui/material";
+import { FcGoogle } from "react-icons/fc";
 //-----------------------
 
 export default function LoginSignup() {
@@ -110,6 +112,10 @@ export default function LoginSignup() {
     }
   };
 
+  const GoogleLogin = () => {
+    console.log("sksksksks");
+    window.open("http://localhost:3000/auth/google", "_self");
+  };
   return (
     <>
       {loading ? (
@@ -124,99 +130,120 @@ export default function LoginSignup() {
               </div>
               <button ref={switcherTab}></button>
             </div>
-            <form className="loginForm" ref={loginTab} onSubmit={loginSubmit}>
-              <div className="loginEmail">
-                <MailOutlineIcon />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  required
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  autoComplete="Email"
-                />
-              </div>
-              <div className="loginPassword">
-                <LockOpenIcon />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  required
-                  value={loginPassword}
-                  onChange={(e) => {
-                    setLoginPassword(e.target.value);
-                  }}
-                  autoComplete="current-password"
-                />
-              </div>
-              <Link to="/password/forgot">Forget Password ?</Link>
-              <input type="submit" value="Login" className="loginBtn" />
-            </form>
-            <form
-              className="signUpForm"
-              ref={registerTab}
-              encType="multipart/form-data"
-              onSubmit={registerSubmit}
-            >
-              <div className="signUpName">
-                <AccountCircleIcon />
-                <input
-                  type="text"
-                  placeholder="Name"
-                  required
-                  name="name"
-                  value={name}
-                  onChange={registerDataChange}
-                />
-              </div>
-              <div className="signUpEmail">
-                <MailOutlineIcon />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  required
-                  name="email"
-                  value={email}
-                  onChange={registerDataChange}
-                />
-              </div>
-              <div className="PhoenNo">
-                <CallIcon />
-                <input
-                  type="text"
-                  placeholder="Mobile No"
-                  required
-                  name="mobile"
-                  value={mobile}
-                  pattern="[0-9]*"
-                  onChange={registerDataChange}
-                  autoComplete=""
-                />
-              </div>
-              <div className="signUpPassword">
-                <LockOpenIcon />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  required
-                  name="password"
-                  value={password}
-                  onChange={registerDataChange}
-                  autoComplete="current-password"
-                />
-              </div>
+            <>
+              <form className="loginForm" ref={loginTab} onSubmit={loginSubmit}>
+                <div className="loginEmail">
+                  <MailOutlineIcon />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    required
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    autoComplete="Email"
+                  />
+                </div>
+                <div className="loginPassword">
+                  <LockOpenIcon />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    required
+                    value={loginPassword}
+                    onChange={(e) => {
+                      setLoginPassword(e.target.value);
+                    }}
+                    autoComplete="current-password"
+                  />
+                </div>
+                <Link to="/password/forgot">Forget Password ?</Link>
+                <input type="submit" value="Login" className="loginBtn" />
+                <Typography>OR</Typography>
 
-              <div id="registerImage">
-                <img src={avatarPreview} alt="Avatar Preview" />
-                <input
-                  type="file"
-                  name="avatar"
-                  accept="image/*"
-                  onChange={registerDataChange}
-                />
-              </div>
-              <input type="submit" value="Register" className="signUpBtn" />
-            </form>
+                <div className="google">
+                  <div className="btn " onClick={GoogleLogin}>
+                    <FcGoogle></FcGoogle>
+                    <Typography className="g">Google</Typography>
+                  </div>
+                </div>
+              </form>
+            </>
+            <>
+              <form
+                className="signUpForm"
+                ref={registerTab}
+                encType="multipart/form-data"
+                onSubmit={registerSubmit}
+              >
+                <div className="signUpName">
+                  <AccountCircleIcon />
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    required
+                    name="name"
+                    value={name}
+                    onChange={registerDataChange}
+                  />
+                </div>
+                <div className="signUpEmail">
+                  <MailOutlineIcon />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    required
+                    name="email"
+                    value={email}
+                    onChange={registerDataChange}
+                  />
+                </div>
+                <div className="PhoenNo">
+                  <CallIcon />
+                  <input
+                    type="text"
+                    placeholder="Mobile No"
+                    required
+                    name="mobile"
+                    value={mobile}
+                    pattern="[0-9]*"
+                    onChange={registerDataChange}
+                    autoComplete=""
+                  />
+                </div>
+                <div className="signUpPassword">
+                  <LockOpenIcon />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    required
+                    name="password"
+                    value={password}
+                    onChange={registerDataChange}
+                    autoComplete="current-password"
+                  />
+                </div>
+
+                <div id="registerImage">
+                  <img src={avatarPreview} alt="Avatar Preview" />
+                  <input
+                    type="file"
+                    name="avatar"
+                    accept="image/*"
+                    onChange={registerDataChange}
+                  />
+                </div>
+                <input type="submit" value="Register" className="signUpBtn" />
+
+                <Typography>OR</Typography>
+
+                <div className="google">
+                  <div className="btn " onClick={GoogleLogin}>
+                    <FcGoogle></FcGoogle>
+                    <Typography className="g">Google</Typography>
+                  </div>
+                </div>
+              </form>
+            </>
           </div>
         </div>
       )}

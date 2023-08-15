@@ -168,6 +168,28 @@
 .Select select option {
   padding: 2.5vmax 5vmax;
 }
+
+.google .btn {
+  margin: auto;
+  display: flex;
+  overflow: hidden;
+  gap: 5px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  cursor: pointer;
+}
+.google .btn svg {
+  font-size: 30px;
+}
+
+.btn .g {
+  font-size: 20px;
+  font-weight: 700;
+  background: transparent;
+}
 @media screen and (max-width: 600px) {
   .LoginSignUpContainer {
     background-color: white;

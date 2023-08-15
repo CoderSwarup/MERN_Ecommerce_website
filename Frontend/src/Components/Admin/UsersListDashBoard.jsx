@@ -29,7 +29,7 @@ export default function UsersList() {
   } = useSelector((state) => state.profile);
 
   const deleteUserHandler = (id) => {
-    // dispatch(DeleteUserAction(id));
+    dispatch(DeleteUserAction(id));
   };
 
   useEffect(() => {

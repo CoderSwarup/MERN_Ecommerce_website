@@ -24,12 +24,12 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
       select: false,
     },
     mobile: {
       type: Number,
-      required: true,
+      // required: true,
     },
     avatar: {
       public_id: {

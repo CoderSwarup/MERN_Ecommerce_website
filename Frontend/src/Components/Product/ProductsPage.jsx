@@ -15,7 +15,7 @@ import Metadata from "../Layouts/MetaData/Metadata";
 export default function ProductsPage() {
   const dispatch = useDispatch();
   const params = useParams();
-  const [value, setValue] = useState([0, 2000]);
+  const [value, setValue] = useState([0, 40000]);
   const [isOpen, setisopen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [rating, setrating] = useState(0);

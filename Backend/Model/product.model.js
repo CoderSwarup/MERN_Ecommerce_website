@@ -39,7 +39,7 @@ const productSchema = new mongoose.Schema(
     },
     stock: {
       type: Number,
-      min: [1, "Product Stock should be greater than or equal to one"],
+      min: [0, "Product Stock should be greater than or equal to one"],
       default: 1,
     },
     numofreviews: {

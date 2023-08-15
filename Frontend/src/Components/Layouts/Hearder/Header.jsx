@@ -14,7 +14,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import SidebarMenu from "./SidebarMenu";
 import { FcList } from "react-icons/fc";
 import { useSelector } from "react-redux";
-
+import logo from "../../../assets/Imges/Logo.jpg";
 export default function Header({ children }) {
   const { isAuthenticated } = useSelector((state) => {
     return state.user;
@@ -92,8 +92,8 @@ export default function Header({ children }) {
       ],
     },
     {
-      path: "/saved",
-      name: "Saved",
+      path: "/about",
+      name: "About Us",
       icon: <AiFillHeart />,
     },
   ];
@@ -166,7 +166,7 @@ export default function Header({ children }) {
                 exit="hidden"
                 className="logo"
               >
-                SamEcomm
+                <img width={100} src={logo} alt="" />
               </motion.h1>
             )}
           </AnimatePresence>

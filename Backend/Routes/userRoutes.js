@@ -33,6 +33,8 @@ userRouter.route("/password/reset/:token").put(ResetPasswordController);
 
 //geting User Profile
 userRouter.route("/myprofile").get(isAuthicatedUser, GetUserDeatils);
+
+//Refrsh Token
 userRouter.route("/refresh-token").get(RefreshTokenController);
 
 //update password
