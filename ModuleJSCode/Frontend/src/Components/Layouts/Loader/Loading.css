@@ -1,0 +1,17 @@
+.loading {
+  position: absolute;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  background: #fffdfd;
+  display: grid;
+  place-items: center;
+}
+
+.loading div {
+  width: 10vmax;
+}
+
+.loading div img {
+  width: 100px;
+}

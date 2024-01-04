@@ -1,0 +1,158 @@
+/* About.css */
+.about-root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.about-paper {
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-logo {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.logo-image {
+  width: 120px;
+  height: auto;
+  animation: spin 4s linear infinite;
+}
+
+.about-form {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.about-icon {
+  font-size: 32px;
+  margin: 8px;
+  color: #333;
+  transition: color 0.3s ease-in-out;
+}
+
+.about-icon:hover {
+  color: #2196f3;
+}
+
+.skills {
+  margin-top: 32px;
+}
+
+.skill {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.skill-name {
+  flex: 1;
+}
+
+.skill-progress {
+  flex: 3;
+}
+
+@media (max-width: 768px) {
+  .about-paper {
+    padding: 24px;
+  }
+
+  .logo-image {
+    width: 80px;
+  }
+
+  .about-icon {
+    font-size: 24px;
+  }
+}
+
+/* About.css */
+.about-root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.about-paper {
+  padding: 32px;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-logo {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.logo-image {
+  width: 120px;
+  height: auto;
+  animation: spin 4s linear infinite;
+}
+
+.about-form {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.about-icon {
+  font-size: 32px;
+  margin: 8px;
+  color: #333;
+  transition: color 0.3s ease-in-out;
+}
+
+.about-icon:hover {
+  color: #2196f3;
+}
+
+.skills {
+  margin-top: 32px;
+}
+
+.skill {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.skill-name {
+  flex: 1;
+}
+
+.skill-progress {
+  flex: 3;
+}
+
+@media (max-width: 768px) {
+  .about-paper {
+    padding: 24px;
+  }
+
+  .logo-image {
+    width: 80px;
+  }
+
+  .about-icon {
+    font-size: 24px;
+  }
+}
+@media (max-width: 500px) {
+  .about-root {
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  .skill-progress {
+    height: 6px; /* Decrease height for smaller screens */
+  }
+}

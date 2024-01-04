@@ -1,0 +1,176 @@
+.productsheading {
+  color: #000;
+  font-size: 30px;
+  padding: 20px;
+  text-align: center;
+}
+
+.products-container {
+  min-height: 80vh;
+}
+
+.products {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.products .filter {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.products .filter h1 {
+  font-size: 22px;
+}
+
+.products .filter .Filter-hading {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 5px 0;
+}
+
+.products .filter .category-label {
+  font-size: 22px;
+  display: block;
+  margin: 3px 0;
+}
+
+.products .filter .custom-checkbox {
+  /* Increase the size of the checkbox */
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  background-color: tomato;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Define the checked state of the custom checkbox */
+.products .filter input[type="checkbox"] {
+  accent-color: tomato;
+}
+
+.products .filter fieldset {
+  margin-top: 10px;
+}
+.products .filter fieldset .l {
+  font-size: 18px;
+}
+
+.Filter-container {
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+}
+.Filter-container-hading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 2px solid tomato;
+}
+
+.Filter-container.FClose {
+  padding: 0;
+  height: 0;
+}
+.Filter-container.FOpen {
+  height: 100%;
+}
+
+.products .allproducts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.notfound {
+  margin-top: 40px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  width: 100vw;
+}
+.notfound img {
+  width: 30vmax;
+  height: 30vmax;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-container ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination-container li {
+  margin: 0 5px;
+}
+
+.pagination-container .page-link {
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-container .page-link:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination-container .active .page-link {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* price filteration silder  */
+/* PriceSlider.css */
+@media screen and (max-width: 700px) {
+  .products {
+    padding-left: 0;
+    flex-direction: column-reverse;
+  }
+  .products .filter {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .products .filter .Filter-hading {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 5px 0;
+  }
+
+  .products .filter .category-label {
+    font-size: 17px;
+    display: block;
+    margin: 3px 0;
+  }
+  .products .filter .custom-checkbox {
+    width: 13px;
+    height: 13px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .Filter-container-hading h1 {
+    padding: 0 15px;
+  }
+}
