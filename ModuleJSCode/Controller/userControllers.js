@@ -10,6 +10,16 @@ import JWT from "jsonwebtoken";
 export const RegisterUserController = async (req, res) => {
   try {
     const { name, email, password, mobile } = req.body;
+
+    if (name.length < 4) {
+      throw ErrorHandler.customError(
+        "username length Must be greater Than 3",
+        401
+      );
+    }
+    if (!name || !email || !password || !mobile) {
+      throw new ErrorHandler(400, "All fields are required!");
+    }
     const registeruser = await usersModel.findOne({ email });
     if (registeruser) {
       return res.status(400).send({
@@ -34,6 +44,7 @@ export const RegisterUserController = async (req, res) => {
         crop: "scale",
       });
     }
+
     const user = await usersModel({
       name,
       email,
@@ -44,25 +55,10 @@ export const RegisterUserController = async (req, res) => {
         url: myCloud?.secure_url || "/Profile.png",
       },
     });
-    user
-      .save()
-      .then((result) => {
-        // const token = user.getJWTToken();
-        // res.status(200).send({
-        //   success: true,
-        //   message: "User is Created Successfully ",
-        //   token,
-        // });
-        sendToken(user, 200, "User is Created Successfully ", res);
-      })
-      .catch((err) => {
-        if (err.code === +11000) {
-          return res.status(201).send({
-            success: false,
-            message: "Email Already Register",
-          });
-        }
-      });
+
+    await user.save();
+
+    sendToken(user, 200, "User Register Successfully", res);
   } catch (error) {
     console.log(error);
     ThrowError(error, res, "Registration");
